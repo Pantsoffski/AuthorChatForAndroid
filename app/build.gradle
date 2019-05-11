@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "pl.ordin.authorchat"
+        minSdkVersion 24
+        targetSdkVersion 28
+        versionCode 1
+        versionName "0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    //regiion Androidx
+
+    implementation deps.androidx.appcompat
+    implementation deps.androidx.constraint_layout
+    implementation deps.androidx.core_ktx
+
+    //endregion
+
+    //region Application Modules
+
+    implementation project(path: ':data')
+
+    //endregion
+
+    //region Kotlin
+
+    implementation deps.jetbrains.kotlin
+
+    //endregion
+
+    //region Fast Adapter
+
+    implementation deps.fast_adapter.core
+
+    //endregion
+}
