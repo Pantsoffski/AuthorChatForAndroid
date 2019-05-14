@@ -46,6 +46,12 @@ dependencies {
 
     //endregion
 
+    //region Coroutines
+
+    implementation deps.jetbrains.coroutines
+
+    //endregion
+
     //region Kotlin
 
     implementation deps.jetbrains.kotlin

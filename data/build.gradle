@@ -45,6 +45,12 @@ dependencies {
 
     //endregion
 
+    //region Retrofit
+
+    implementation deps.retrofit.runtime
+
+    //endregion
+
     //region Stetho
 
     implementation deps.facebook.stetho
