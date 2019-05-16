@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -40,21 +41,29 @@ dependencies {
 
     //endregion
 
-    //region Application Modules
-
-    implementation project(path: ':data')
-
-    //endregion
-
     //region Coroutines
 
     implementation deps.jetbrains.coroutines
 
     //endregion
 
+    //region Dagger
+
+    kapt deps.dagger.compiler
+    annotationProcessor deps.dagger.processor
+    implementation deps.dagger.runtime
+
+    //endregion
+
     //region Kotlin
 
     implementation deps.jetbrains.kotlin
+
+    //endregion
+
+    //region Modules
+
+    api project(':data')
 
     //endregion
 

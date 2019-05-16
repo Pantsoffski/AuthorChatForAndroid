@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -30,4 +33,23 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    //region Androidx
+
+    implementation deps.androidx.lifecycle_extensions
+
+    //endregion
+
+    //region Kotlin
+
+    implementation deps.jetbrains.kotlin
+
+    //endregion
+
+    //region Retrofit
+
+    implementation deps.retrofit.converter
+    implementation deps.retrofit.runtime
+
+    //endregion
 }
