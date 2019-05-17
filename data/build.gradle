@@ -24,6 +24,15 @@ android {
         }
     }
 
+    //region Compile Options
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    //endregion
+
 }
 
 dependencies {
@@ -35,8 +44,8 @@ dependencies {
 
     //region Androidx
 
-    implementation deps.androidx.appcompat
-    implementation deps.androidx.core_ktx
+    api deps.androidx.appcompat
+    api deps.androidx.core_ktx
 
     //endregion
 
@@ -44,13 +53,13 @@ dependencies {
 
     kapt deps.dagger.compiler
     annotationProcessor deps.dagger.processor
-    implementation deps.dagger.runtime
+    api deps.dagger.runtime
 
     //endregion
 
     //region Kotlin
 
-    implementation deps.jetbrains.kotlin
+    api deps.jetbrains.kotlin
 
     //endregion
 
@@ -62,14 +71,15 @@ dependencies {
 
     //region Retrofit
 
-    implementation deps.retrofit.converter
-    implementation deps.retrofit.runtime
+    api deps.retrofit.converter
+    api deps.retrofit.logging
+    api deps.retrofit.runtime
 
     //endregion
 
     //region Stetho
 
-    implementation deps.facebook.stetho
+    api deps.facebook.stetho
 
     //endregion
 }

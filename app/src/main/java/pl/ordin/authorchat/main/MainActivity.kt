@@ -27,13 +27,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         DaggerAppComponent.create().inject(this)
 
-        val observable = wordpressApi.hitCountCheck("query", "json", "search", "Trump")
+        val observable = wordpressApi.getChat("xxx", "xxx", "xxx")
 
         observable.observe(this, Observer { result ->
             if (result is ApiSuccessResponse) {
-                val totalHits = result.body.query.searchinfo.totalhits
-
-                println("Rezultat: $totalHits")
+                println("Rezultat: ${result.body.msg}")
             }
         })
 

@@ -24,6 +24,15 @@ android {
         }
     }
 
+    //region Compile Options
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    //endregion
+
 }
 
 dependencies {
@@ -36,20 +45,21 @@ dependencies {
 
     //region Androidx
 
-    implementation deps.androidx.lifecycle_extensions
+    api deps.androidx.lifecycle_extensions
 
     //endregion
 
     //region Kotlin
 
-    implementation deps.jetbrains.kotlin
+    api deps.jetbrains.kotlin
 
     //endregion
 
     //region Retrofit
 
-    implementation deps.retrofit.converter
-    implementation deps.retrofit.runtime
+    api deps.retrofit.converter
+    api deps.retrofit.logging
+    api deps.retrofit.runtime
 
     //endregion
 }
