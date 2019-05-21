@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.facebook.stetho.Stetho
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -27,11 +28,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         DaggerAppComponent.create().inject(this)
 
-        val observable = wordpressApi.getChat("xxx", "xxx", "xxx")
+        Stetho.initializeWithDefaults(this)
+
+        val observable = wordpressApi.getMessages("read", "", "xxx", "xxx", 0)
 
         observable.observe(this, Observer { result ->
             if (result is ApiSuccessResponse) {
-                println("Rezultat: ${result.body.msg}")
+                println("Rezultat: ${result.body}")
             }
         })
 

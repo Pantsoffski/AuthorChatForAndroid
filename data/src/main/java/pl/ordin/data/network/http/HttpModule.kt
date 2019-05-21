@@ -1,5 +1,6 @@
 package pl.ordin.data.network.http
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -41,6 +42,7 @@ class HttpModule {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
+            .addNetworkInterceptor(StethoInterceptor())
             .addInterceptor(logging)
             .build()
     }
