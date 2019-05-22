@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        DaggerAppComponent.create().inject(this)
+        DaggerAppComponent.create().injectMain(this)
 
         Stetho.initializeWithDefaults(this)
 

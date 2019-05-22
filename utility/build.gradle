@@ -49,6 +49,14 @@ dependencies {
 
     //endregion
 
+    //region Dagger
+
+    kapt deps.dagger.compiler
+    annotationProcessor deps.dagger.processor
+    api deps.dagger.runtime
+
+    //endregion
+
     //region Kotlin
 
     api deps.jetbrains.kotlin
