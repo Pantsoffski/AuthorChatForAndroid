@@ -1,8 +1,10 @@
 package pl.ordin.authorchat.app
 
+import android.content.Context
+import dagger.BindsInstance
 import dagger.Component
-import pl.ordin.authorchat.main.MainActivity
-import pl.ordin.authorchat.main.login.LoginViewModel
+import dagger.android.support.AndroidSupportInjectionModule
+import pl.ordin.authorchat.main.MainModule
 import pl.ordin.data.network.http.HttpModule
 import pl.ordin.utility.sharedpreferences.SharedPreferencesModule
 import javax.inject.Singleton
@@ -10,24 +12,21 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
+        AndroidSupportInjectionModule::class,
+        MainModule::class,
         HttpModule::class,
-        AppModule::class,
         SharedPreferencesModule::class
     ]
 )
 interface AppComponent {
-//    @Component.Builder
-//    interface Builder {
-//        @BindsInstance
-//        fun application(application: AuthorChat): AppComponent.Builder
-//
-//        fun build(): AppComponent
-//    }
-//
-//    fun inject(application: AuthorChat)
 
-    fun injectMain(mainActivity: MainActivity)
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun applicationContext(applicationContext: Context): Builder
 
-    fun injectLoginViewModel(loginViewModel: LoginViewModel)
+        fun build(): AppComponent
+    }
 
+    fun inject(authorChat: AuthorChat)
 }

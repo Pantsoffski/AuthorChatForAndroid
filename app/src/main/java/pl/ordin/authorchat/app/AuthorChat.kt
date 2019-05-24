@@ -1,17 +1,24 @@
 package pl.ordin.authorchat.app
 
+import android.app.Activity
 import android.app.Application
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import javax.inject.Inject
 
-class AuthorChat : Application() {
-    //val context: Context =  this.applicationContext
+class AuthorChat : Application(), HasActivityInjector {
 
-    companion object {
-        fun newInstance() = AuthorChat()
+    @Inject
+    lateinit var activityInjector: DispatchingAndroidInjector<Activity>
+
+    override fun activityInjector() = activityInjector
+
+    override fun onCreate() {
+        super.onCreate()
+
+        DaggerAppComponent.builder()
+            .applicationContext(this)
+            .build()
+            .inject(this)
     }
-
-//    override fun onCreate() {
-//        super.onCreate()
-//
-//
-//    }
 }

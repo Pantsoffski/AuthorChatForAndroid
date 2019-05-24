@@ -1,22 +1,22 @@
 package pl.ordin.authorchat.main
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.facebook.stetho.Stetho
+import dagger.android.AndroidInjection
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.ordin.authorchat.R
-import pl.ordin.authorchat.app.DaggerAppComponent
 import pl.ordin.data.network.apiservice.WordpressApi
 import pl.ordin.utility.retrofitlivedata.ApiSuccessResponse
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var wordpressApi: WordpressApi
@@ -26,7 +26,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        DaggerAppComponent.create().injectMain(this)
+        //DaggerAppComponent.create().injectMain(this)
+
+        AndroidInjection.inject(this)
 
         Stetho.initializeWithDefaults(this)
 

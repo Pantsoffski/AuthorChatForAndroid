@@ -30,6 +30,7 @@ androidx.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
 androidx.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
 androidx.core_ktx = "androidx.core:core-ktx:$versions.core_ktx"
 androidx.lifecycle_extensions = "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+androidx.lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
 androidx.navigation_fragment = "androidx.navigation:navigation-fragment:$versions.navigation"
 androidx.navigation_ui = "androidx.navigation:navigation-ui:$versions.navigation"
 deps.androidx = androidx
@@ -50,7 +51,8 @@ deps.build = build
 def dagger = [:]
 dagger.compiler = "com.google.dagger:dagger-compiler:$versions.dagger"
 dagger.processor = "com.google.dagger:dagger-android-processor:$versions.dagger"
-dagger.runtime = "com.google.dagger:dagger:$versions.dagger"
+dagger.runtime = "com.google.dagger:dagger-android:$versions.dagger"
+dagger.support = "com.google.dagger:dagger-android-support:$versions.dagger"
 deps.dagger = dagger
 
 //endregion

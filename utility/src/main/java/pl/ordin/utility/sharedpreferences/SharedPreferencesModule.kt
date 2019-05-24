@@ -1,19 +1,20 @@
 package pl.ordin.utility.sharedpreferences
 
-import android.app.Application
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class SharedPreferencesModule {
+object SharedPreferencesModule {
 
     //region SharedPreferencesHelper
 
     @Provides
     @Singleton
-    fun provideSharedPreferencesHelper(application: Application): SharedPreferencesHelper {
-        return SharedPreferencesHelper(application)
+    @JvmStatic
+    fun provideSharedPreferencesHelper(context: Context): SharedPreferencesHelper {
+        return SharedPreferencesHelper(context)
     }
 
     //endregion

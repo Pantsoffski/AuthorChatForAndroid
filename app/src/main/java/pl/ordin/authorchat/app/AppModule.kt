@@ -8,14 +8,7 @@ import javax.inject.Singleton
 @Module
 class AppModule {
 
-    //region Application Context
-
     @Provides
     @Singleton
-    fun provideContext(): Context {
-        return AuthorChat.newInstance().applicationContext
-    }
-
-    //endregion
-
+    fun provideApplicationContext(application: AuthorChat): Context = application
 }

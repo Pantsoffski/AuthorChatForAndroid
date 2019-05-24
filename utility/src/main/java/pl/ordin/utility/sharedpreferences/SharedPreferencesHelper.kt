@@ -1,6 +1,6 @@
 package pl.ordin.utility.sharedpreferences
 
-import android.app.Application
+import android.content.Context
 import android.preference.PreferenceManager
 
 //region Login Data
@@ -12,8 +12,8 @@ const val REMEMBER_USER = "rememberUser"
 
 //endregion
 
-class SharedPreferencesHelper(a: Application) {
-    private val prefs = PreferenceManager.getDefaultSharedPreferences(a)
+class SharedPreferencesHelper(c: Context) {
+    private val prefs = PreferenceManager.getDefaultSharedPreferences(c)
 
     //region Login Data Shared Prefs getters/setters
 

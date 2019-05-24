@@ -33,20 +33,19 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
     //region Androidx
 
-    implementation deps.androidx.appcompat
-    implementation deps.androidx.constraint_layout
-    implementation deps.androidx.core_ktx
-    implementation deps.androidx.lifecycle_extensions
-    implementation deps.androidx.navigation_fragment
-    implementation deps.androidx.navigation_ui
+    api deps.androidx.appcompat
+    api deps.androidx.constraint_layout
+    api deps.androidx.core_ktx
+    api deps.androidx.lifecycle_extensions
+    api deps.androidx.lifecycle_viewmodel
+    api deps.androidx.navigation_fragment
+    api deps.androidx.navigation_ui
 
     //endregion
 
@@ -59,8 +58,8 @@ dependencies {
     //region Dagger
 
     kapt deps.dagger.compiler
-    annotationProcessor deps.dagger.processor
-    implementation deps.dagger.runtime
+    kapt deps.dagger.processor
+    implementation deps.dagger.support
 
     //endregion
 
@@ -72,7 +71,7 @@ dependencies {
 
     //region Modules
 
-    api project(':data')
+    implementation project(':data')
 
     //endregion
 
