@@ -1,8 +1,9 @@
 package pl.ordin.authorchat.main.login
 
 import androidx.lifecycle.ViewModel
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel @Inject constructor() : ViewModel() {
 
 //    @Inject
 //    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
@@ -11,4 +12,8 @@ class LoginViewModel : ViewModel() {
 //        val x = sharedPreferencesHelper.websiteUrl
 //        println("Rezultat: $x")
 //    }
+
+    fun test() {
+        println("Rezultat: dziala")
+    }
 }

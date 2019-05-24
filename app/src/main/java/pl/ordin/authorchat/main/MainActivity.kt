@@ -1,12 +1,15 @@
 package pl.ordin.authorchat.main
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjection
-import dagger.android.support.DaggerAppCompatActivity
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -16,23 +19,25 @@ import pl.ordin.data.network.apiservice.WordpressApi
 import pl.ordin.utility.retrofitlivedata.ApiSuccessResponse
 import javax.inject.Inject
 
-class MainActivity : DaggerAppCompatActivity() {
+class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var wordpressApi: WordpressApi
 
+    @Inject
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+
     //region Lifecycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //DaggerAppComponent.create().injectMain(this)
-
-        AndroidInjection.inject(this)
 
         Stetho.initializeWithDefaults(this)
 
-        val observable = wordpressApi.getMessages("read", "", "xxx", "xxx", 0)
+        val observable = wordpressApi.getMessages("read", "", "xx", "xxx", 0)
 
         observable.observe(this, Observer { result ->
             if (result is ApiSuccessResponse) {
@@ -58,6 +63,8 @@ class MainActivity : DaggerAppCompatActivity() {
     override fun onSupportNavigateUp() = Navigation.findNavController(this, R.id.splashFragment).navigateUp()
 
     //endregion
+
+    override fun supportFragmentInjector() = fragmentInjector
 
 //    fun <VM> xyz(i: Int): VM? {
 //        return null
