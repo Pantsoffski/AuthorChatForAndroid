@@ -4,7 +4,7 @@
 
     <string name="app_name">Author Chat</string>
 
-    <!-- endregion -->
+    <!-- endregion -->S
 
     <!-- region Login -->
 
@@ -12,7 +12,7 @@
     <string name="login_username_placeholder">username</string>
     <string name="login_password_placeholder">password</string>
     <string name="login_checkbox_text">Remember user?</string>
-    <string name="login_website_address_placeholder">eg. www.example.com or example.com</string>
+    <string name="login_website_address_placeholder">eg. MyWebsite.com</string>
 
     <string-array name="login_spinner_url_prefix">
         <item>https://</item>

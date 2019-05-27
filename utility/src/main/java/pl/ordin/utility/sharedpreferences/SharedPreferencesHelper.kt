@@ -2,9 +2,11 @@ package pl.ordin.utility.sharedpreferences
 
 import android.content.Context
 import android.preference.PreferenceManager
+import javax.inject.Singleton
 
 //region Login Data
 
+const val WEBSITE_PREFIX = "websitePrefix"
 const val WEBSITE_URL = "websiteUrl"
 const val USERNAME = "username"
 const val PASSWORD = "password"
@@ -12,12 +14,21 @@ const val REMEMBER_USER = "rememberUser"
 
 //endregion
 
+@Singleton
 class SharedPreferencesHelper(c: Context) {
     private val prefs = PreferenceManager.getDefaultSharedPreferences(c)
 
     //region Login Data Shared Prefs getters/setters
 
-    var websiteUrl: String
+    var websiteUrlPrefixPref: String
+        get() = prefs.getString(WEBSITE_PREFIX, "")!!
+        set(value) {
+            prefs.edit()
+                .putString(WEBSITE_PREFIX, value)
+                .apply()
+        }
+
+    var websiteUrlPref: String
         get() = prefs.getString(WEBSITE_URL, "")!!
         set(value) {
             prefs.edit()
@@ -25,7 +36,7 @@ class SharedPreferencesHelper(c: Context) {
                 .apply()
         }
 
-    var username: String
+    var usernamePref: String
         get() = prefs.getString(USERNAME, "")!!
         set(value) {
             prefs.edit()
@@ -33,7 +44,7 @@ class SharedPreferencesHelper(c: Context) {
                 .apply()
         }
 
-    var password: String
+    var passwordPref: String
         get() = prefs.getString(PASSWORD, "")!!
         set(value) {
             prefs.edit()
@@ -41,7 +52,7 @@ class SharedPreferencesHelper(c: Context) {
                 .apply()
         }
 
-    var rememberUser: Boolean
+    var rememberUserPref: Boolean
         get() = prefs.getBoolean(REMEMBER_USER, true)
         set(value) {
             prefs.edit()

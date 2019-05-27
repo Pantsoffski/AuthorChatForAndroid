@@ -18,16 +18,9 @@ class LoginFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory<LoginViewModel>
 
-//    @Inject
-//    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
-
-//    private val viewModel by lazy {
-//        ViewModelProviders
-//            .of(this, viewModelFactory)
-//            .get(LoginViewModel::class.java)
-//    }
-
     private lateinit var viewModel: LoginViewModel
+
+    //region Lifecycle
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -43,24 +36,51 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
 
-//        val x = sharedPreferencesHelper.websiteUrl
-//        println("Rezultat: $x")
+        getLastSignInDataIfExists()
 
-        viewModel.test()
+        setListeners()
     }
 
-    private fun setListeners() {
-        signInButton.setOnClickListener {
-            //todo save to prefs
-            urlPrefixSpinner.selectedItem.toString()
-            websiteAddress.text
-            username.text
-            password.text
-            rememberUserCheckBox.text
+    //endregion
+
+    //region Populate fields with data from preferences
+
+    private fun getLastSignInDataIfExists() {
+        val signInData = viewModel.getSignInData()
+
+        if (signInData["websiteAddress"].toString().isNotEmpty()) {
+            urlPrefixSpinner.setSelection(
+                if (signInData["websitePrefix"] == "https://")
+                    0
+                else
+                    1
+            )
+
+            websiteAddress.setText(signInData["websiteAddress"] as String)
+            username.setText(signInData["username"] as String)
+            password.setText(signInData["password"] as String)
+            rememberUserCheckBox.isChecked = signInData["rememberUser"] as Boolean
         }
     }
 
+    //endregion
+
+    //region Set Listeners
+
+    private fun setListeners() {
+        signInButton.setOnClickListener {
+            viewModel.saveSignInData(
+                websitePrefix = urlPrefixSpinner.selectedItem.toString(),
+                websiteAddress = websiteAddress.text.toString(),
+                username = username.text.toString(),
+                password = password.text.toString(),
+                rememberUser = rememberUserCheckBox.isChecked
+            )
+        }
+    }
+
+    //endregion
 }
