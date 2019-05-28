@@ -37,6 +37,9 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        // hide toolbar
+        //activity?.actionBar?.hide()
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
 
         getLastSignInDataIfExists()

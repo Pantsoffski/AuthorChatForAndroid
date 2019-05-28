@@ -3,20 +3,13 @@ package pl.ordin.authorchat.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import pl.ordin.authorchat.R
 import pl.ordin.data.network.apiservice.WordpressApi
-import pl.ordin.utility.retrofitlivedata.ApiSuccessResponse
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
@@ -37,28 +30,18 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
         Stetho.initializeWithDefaults(this)
 
-        val observable = wordpressApi.getMessages("read", "", "xx", "xxx", 0)
-
-        observable.observe(this, Observer { result ->
-            if (result is ApiSuccessResponse) {
-                println("Rezultat: ${result.body}")
-            }
-        })
-
-        redirect()
+//        val observable = wordpressApi.getMessages("read", "", "xx", "xxx", 0)
+//
+//        observable.observe(this, Observer { result ->
+//            if (result is ApiSuccessResponse) {
+//                println("Rezultat: ${result.body}")
+//            }
+//        })
     }
 
     //endregion
 
     //region UI
-
-    private fun redirect() {
-        GlobalScope.launch {
-            delay(2000)
-
-            findNavController(navHostFragment).navigate(R.id.loginFragment)
-        }
-    }
 
     override fun onSupportNavigateUp() = Navigation.findNavController(this, R.id.splashFragment).navigateUp()
 

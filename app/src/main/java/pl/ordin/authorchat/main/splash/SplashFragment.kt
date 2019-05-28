@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import pl.ordin.authorchat.R
 
 class SplashFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = SplashFragment()
-    }
 
     private lateinit var viewModel: SplashViewModel
 
@@ -26,7 +27,16 @@ class SplashFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(SplashViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        redirectToSignIn()
+    }
+
+    private fun redirectToSignIn() {
+        GlobalScope.launch {
+            delay(2000)
+
+            NavHostFragment.findNavController(navHostFragment).navigate(R.id.loginFragment)
+        }
     }
 
 }
