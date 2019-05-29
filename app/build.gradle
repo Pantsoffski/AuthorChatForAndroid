@@ -75,9 +75,10 @@ dependencies {
 
     //endregion
 
-    //region Fast Adapter
+    //region Groupie
 
-    implementation deps.fast_adapter.core
+    implementation deps.groupie.core
+    implementation deps.groupie.kotlin_extensions
 
     //endregion
 }
