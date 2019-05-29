@@ -20,4 +20,12 @@
     </string-array>
 
     <!-- endregion -->
+
+    <!-- region Chat -->
+
+    <string name="chat_button_send_message">Send</string>
+    <string name="chat_message_hint">Your message…</string>
+    <string name="chat_button_main_room">Main Room</string>
+
+    <!-- endregion -->
 </resources>

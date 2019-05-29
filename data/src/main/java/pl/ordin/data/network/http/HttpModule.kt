@@ -32,6 +32,14 @@ class HttpModule {
         return retrofit.create(WordpressApi::class.java)
     }
 
+//    @Provides
+//    @Singleton
+//    fun getWebsiteUrl(): String {
+//        return with(sharedPreferencesHelper) {
+//            websiteUrlPrefixPref + websiteUrlPref
+//        }
+//    }
+
     //endregion
 
     //region Retrofit - Http

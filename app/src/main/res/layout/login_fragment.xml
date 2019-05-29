@@ -17,7 +17,8 @@
             app:layout_constraintStart_toStartOf="parent"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true" android:cropToPadding="false" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout" android:layout_marginTop="8dp"/>
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutRoomsButtonsContainer"
+            android:layout_marginTop="8dp"/>
 
     <!-- region Login Form -->
 
@@ -28,7 +29,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/linearLayout"
+            android:id="@+id/linearLayoutRoomsButtonsContainer"
             android:layout_marginBottom="8dp">
         <LinearLayout
                 android:orientation="horizontal"
