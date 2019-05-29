@@ -1,5 +1,6 @@
 package pl.ordin.data.network.http
 
+import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
@@ -7,6 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import pl.ordin.data.network.apiservice.WordpressApi
 import pl.ordin.utility.retrofitlivedata.LiveDataCallAdapterFactory
+import pl.ordin.utility.sharedpreferences.SharedPreferencesHelper
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -15,13 +17,16 @@ import javax.inject.Singleton
 @Module
 class HttpModule {
 
+//    @Inject
+//    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
+
     //region Retrofit
 
     @Provides
     @Singleton
-    fun provideServerRetrofit(client: OkHttpClient): WordpressApi {
+    fun provideServerRetrofit(client: OkHttpClient, url: String): WordpressApi {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://xxx.pl/")
+            .baseUrl(url)
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
@@ -32,13 +37,15 @@ class HttpModule {
         return retrofit.create(WordpressApi::class.java)
     }
 
-//    @Provides
-//    @Singleton
-//    fun getWebsiteUrl(): String {
-//        return with(sharedPreferencesHelper) {
-//            websiteUrlPrefixPref + websiteUrlPref
-//        }
-//    }
+    @Provides
+    @Singleton
+    fun getWebsiteUrl(context: Context): String {
+        val sharedPreferencesHelper = SharedPreferencesHelper(context)
+
+        return with(sharedPreferencesHelper) {
+            websiteUrlPrefixPref + websiteUrlPref
+        }
+    }
 
     //endregion
 
