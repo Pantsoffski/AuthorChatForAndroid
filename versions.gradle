@@ -57,7 +57,7 @@ deps.dagger = dagger
 
 //endregion
 
-//region Fast Adapter
+//region Groupie
 
 def groupie = [:]
 groupie.core = "com.xwray:groupie:$versions.groupie"

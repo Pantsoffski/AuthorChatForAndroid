@@ -3,6 +3,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+//region experimental for Groupie
+
+androidExtensions {
+    experimental = true
+}
+
+//endregion
+
 android {
     compileSdkVersion 28
     defaultConfig {
