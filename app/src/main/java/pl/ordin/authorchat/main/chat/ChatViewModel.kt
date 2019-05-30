@@ -1,9 +1,11 @@
 package pl.ordin.authorchat.main.chat
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import pl.ordin.data.network.apiservice.WordpressApi
+import pl.ordin.utility.retrofitlivedata.ApiResponse
 import pl.ordin.utility.retrofitlivedata.ApiSuccessResponse
 import pl.ordin.utility.sharedpreferences.SharedPreferencesHelper
 import javax.inject.Inject
@@ -14,20 +16,8 @@ class ChatViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun getMessages(room: Int): LiveData<Triple<List<String>, List<String>, List<String>>?> {
-
-//        fun returnTriple(liveData: LiveData<ApiResponse<WordpressApi.Result>>): LiveData<Triple<List<String>, List<String>, List<String>>> {
-//
-//        }
-
-//        Transformations.switchMap(wordpressApi.getMessages("read", "", "xx", "xxx", 0)) {
-//            if (it is ApiSuccessResponse)
-//                Triple(it.body.nick, it.body.date, it.body.msg)
-//            else
-//                Triple(null, null, null)
-//        }
-
-        return Transformations.map(
-            wordpressApi.getMessages(
+        return Transformations.switchMap(
+            wordpressApi.websiteRest(
                 "read",
                 "",
                 sharedPreferencesHelper.usernamePref,
@@ -35,8 +25,38 @@ class ChatViewModel @Inject constructor(
                 room
             )
         ) {
+            val data = MutableLiveData<Triple<List<String>, List<String>, List<String>>?>()
+
+            if (it is ApiSuccessResponse) {
+                data.postValue(Triple(it.body.nick, it.body.date, it.body.msg))
+                data
+            } else
+                null
+        }
+    }
+
+    fun sendMessage(room: Int, message: String): LiveData<ApiResponse<WordpressApi.Result>> {
+        return wordpressApi.websiteRest(
+            "send",
+            message,
+            sharedPreferencesHelper.usernamePref,
+            sharedPreferencesHelper.passwordPref,
+            room
+        )
+    }
+
+    fun getRooms(): LiveData<List<Int>?> {
+        return Transformations.map(
+            wordpressApi.websiteRest(
+                "rooms",
+                "",
+                sharedPreferencesHelper.usernamePref,
+                sharedPreferencesHelper.passwordPref,
+                0
+            )
+        ) {
             if (it is ApiSuccessResponse)
-                Triple(it.body.nick, it.body.date, it.body.msg)
+                it.body.room
             else
                 null
         }

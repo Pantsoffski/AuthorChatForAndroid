@@ -10,7 +10,7 @@ interface WordpressApi {
     //region Wordpress REST
 
     @POST("wp-json/author-chat/v2/chat")
-    fun getMessages(
+    fun websiteRest(
         @Query("function") function: String,
         @Query("msg") msg: String,
         @Query("l") login: String,
@@ -25,6 +25,22 @@ interface WordpressApi {
         val room: List<Int>,
         val ver: String,
         val sec: Boolean
+    )
+
+    @POST("wp-json/author-chat/v2/chat")
+    fun sendMessage(
+        @Query("function") function: String,
+        @Query("msg") msg: String,
+        @Query("l") login: String,
+        @Query("p") password: String,
+        @Query("room") room: Int
+    ): LiveData<ApiResponse<SendResult>>
+
+    data class SendResult(
+        val nick: String,
+        val msg: String,
+        val date: String,
+        val room: Int
     )
 
     //endregion

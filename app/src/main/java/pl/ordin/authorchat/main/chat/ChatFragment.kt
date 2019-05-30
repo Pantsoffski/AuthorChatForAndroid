@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.facebook.stetho.Stetho
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import dagger.android.support.AndroidSupportInjection
@@ -49,14 +48,16 @@ class ChatFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ChatViewModel::class.java)
 
-        Stetho.initializeWithDefaults(this.context) // to delete
-
         setUpGroupie()
 
         startObservers()
+
+        startListeners()
     }
 
     //endregion
+
+    //region Start due lifecycle
 
     private fun setUpGroupie() {
         //groupAdapter.add(MessageItem("1", "2", "3"))
@@ -68,6 +69,9 @@ class ChatFragment : Fragment() {
     }
 
     private fun startObservers() {
+
+        //region Get messages
+
         viewModel.getMessages(0).observe(this, Observer { result ->
             result?.let {
                 for (i in it.first.indices) {
@@ -76,7 +80,34 @@ class ChatFragment : Fragment() {
                 }
             }
         })
+
+        //endregion
+
+        //region Get rooms for user
+
+        viewModel.getRooms().observe(this, Observer { result ->
+            result?.let {
+                println("Rooms: $it") //todo populate buttons with rooms
+            }
+        })
+
+        //endregion
     }
+
+    private fun startListeners() {
+        sendButton.setOnClickListener {
+            val textToSend = messageEditText.text.toString()
+
+            viewModel.sendMessage(0, textToSend).observe(this, Observer {
+                println(it)
+            })
+
+            messageEditText.text.clear()
+        }
+    }
+
+    //endregion
+
 
 //    private fun populateMessages(): MutableList<MessageItem> {
 //        return MutableList(15) {
