@@ -26,6 +26,7 @@
     <string name="chat_button_send_message">Send</string>
     <string name="chat_message_hint">Your message…</string>
     <string name="chat_button_main_room">Main Room</string>
+    <string name="chat_button_room">Room %1$d</string>
 
     <!-- endregion -->
 </resources>

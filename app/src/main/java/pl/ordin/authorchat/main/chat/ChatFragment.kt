@@ -1,14 +1,19 @@
 package pl.ordin.authorchat.main.chat
 
 import android.content.Context
+import android.content.res.Resources.getSystem
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import dagger.android.support.AndroidSupportInjection
@@ -87,7 +92,13 @@ class ChatFragment : Fragment() {
 
         viewModel.getRooms().observe(this, Observer { result ->
             result?.let {
-                println("Rooms: $it") //todo populate buttons with rooms
+
+                for (i in it.indices) {
+                    val btn = roomButtonStyler()
+                    btn.text = getString(R.string.chat_button_room, i + 1)
+                    flexboxLayoutRoomsButtonsContainer.addView(btn)
+                }
+
             }
         })
 
@@ -108,10 +119,21 @@ class ChatFragment : Fragment() {
 
     //endregion
 
+    private fun roomButtonStyler(): MaterialButton {
+        val button = MaterialButton(ContextThemeWrapper(this.context, R.style.MaterialButtonsStyle), null, 0)
+        val layoutParams =
+            LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        layoutParams.setMargins(2.toPx())
 
-//    private fun populateMessages(): MutableList<MessageItem> {
-//        return MutableList(15) {
-//            MessageItem()
-//        }
-//    }
+        // called separately because this from MaterialButtonsStyle doesn't work in ContextThemeWrapper
+        button.apply {
+            cornerRadius = 20
+            setLayoutParams(layoutParams)
+        }
+
+        return button
+    }
+
+    // dp to px converter
+    private fun Int.toPx(): Int = (this * getSystem().displayMetrics.density).toInt()
 }
