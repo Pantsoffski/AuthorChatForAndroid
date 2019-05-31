@@ -12,7 +12,8 @@ versions.constraint_layout = "1.1.3"
 versions.core_ktx = "1.0.2"
 versions.coroutines = "1.1.1"
 versions.dagger = "2.22.1"
-versions.fancy_buttons = "1.9.1"
+versions.flexbox = "1.1.0"
+versions.google_material = "1.1.0-alpha06"
 versions.groupie = "2.3.0"
 versions.kotlin = "1.3.31"
 versions.lifecycle = "2.0.0"
@@ -58,11 +59,12 @@ deps.dagger = dagger
 
 //endregion
 
-//region Fancy Buttons
+//region Google Material
 
-def fancyButtons = [:]
-fancyButtons.buttons = "com.github.medyo:fancybuttons:$versions.fancy_buttons"
-deps.fancyButtons = fancyButtons
+def google = [:]
+google.material = "com.google.android.material:material:$versions.google_material"
+google.flexbox = "com.google.android:flexbox:$versions.flexbox"
+deps.google = google
 
 //endregion
 

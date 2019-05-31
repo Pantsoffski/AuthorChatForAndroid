@@ -71,9 +71,15 @@ dependencies {
 
     //endregion
 
-    //region Fancy Buttons
+    //region Google Material
 
-    implementation deps.fancyButtons.buttons
+    implementation deps.google.material
+
+    //endregion
+
+    //region Google Flexbox
+
+    implementation deps.google.flexbox
 
     //endregion
 
