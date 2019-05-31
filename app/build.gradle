@@ -71,6 +71,12 @@ dependencies {
 
     //endregion
 
+    //region Fancy Buttons
+
+    implementation deps.fancyButtons.buttons
+
+    //endregion
+
     //region Kotlin
 
     implementation deps.jetbrains.kotlin
