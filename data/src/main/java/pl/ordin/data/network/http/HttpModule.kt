@@ -17,9 +17,6 @@ import javax.inject.Singleton
 @Module
 class HttpModule {
 
-//    @Inject
-//    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
-
     //region Retrofit
 
     @Provides

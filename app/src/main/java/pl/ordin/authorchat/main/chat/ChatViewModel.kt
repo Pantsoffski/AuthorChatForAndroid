@@ -1,7 +1,7 @@
 package pl.ordin.authorchat.main.chat
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import pl.ordin.data.network.apiservice.WordpressApi
@@ -15,20 +15,37 @@ class ChatViewModel @Inject constructor(
     private var sharedPreferencesHelper: SharedPreferencesHelper
 ) : ViewModel() {
 
-    fun getMessages(room: Int): LiveData<Triple<List<String>, List<String>, List<String>>?> {
+//    val messages = MediatorLiveData<WebsiteAnswer?>()
+//
+//    private val websiteMessagesServiceAnswer = Transformations.map(
+//        wordpressApi.websiteRest(
+//            "read",
+//            "",
+//            sharedPreferencesHelper.usernamePref,
+//            sharedPreferencesHelper.passwordPref,
+//            0
+//        )
+//    ) {
+//        if (it is ApiSuccessResponse) {
+//            WebsiteAnswer(it.body.nick, it.body.date, it.body.msg, it.body.room)
+//        } else
+//            null
+//    }
+
+    fun getMessages(): LiveData<WebsiteAnswer?> {
         return Transformations.switchMap(
             wordpressApi.websiteRest(
                 "read",
                 "",
                 sharedPreferencesHelper.usernamePref,
                 sharedPreferencesHelper.passwordPref,
-                room
+                0
             )
         ) {
-            val data = MutableLiveData<Triple<List<String>, List<String>, List<String>>?>()
+            val data = MediatorLiveData<WebsiteAnswer?>()
 
             if (it is ApiSuccessResponse) {
-                data.postValue(Triple(it.body.nick, it.body.date, it.body.msg))
+                data.postValue(WebsiteAnswer(it.body.nick, it.body.date, it.body.msg, it.body.room))
                 data
             } else
                 null
@@ -61,4 +78,15 @@ class ChatViewModel @Inject constructor(
                 null
         }
     }
+
+//    fun refreshMessages() = websiteMessagesServiceAnswer?.let {
+//        messages.value = it.value
+//    }
+
+    data class WebsiteAnswer(
+        val nick: List<String>,
+        val date: List<String>,
+        val msg: List<String>,
+        val room: List<Int>
+    )
 }

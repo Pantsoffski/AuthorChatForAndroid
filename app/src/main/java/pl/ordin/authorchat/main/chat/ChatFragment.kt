@@ -34,6 +34,10 @@ class ChatFragment : Fragment() {
         GroupAdapter<ViewHolder>()
     }
 
+    private lateinit var messagesObserver: Observer<ChatViewModel.WebsiteAnswer?>
+
+    private var activeRoom = 0
+
     //region Lifecycle
 
     override fun onAttach(context: Context) {
@@ -57,7 +61,7 @@ class ChatFragment : Fragment() {
 
         startObservers()
 
-        startListeners()
+        setMainRoomSendButtonsListeners()
     }
 
     //endregion
@@ -77,14 +81,21 @@ class ChatFragment : Fragment() {
 
         //region Get messages
 
-        viewModel.getMessages(0).observe(this, Observer { result ->
+        messagesObserver = Observer { result ->
+            viewModel.getMessages().removeObserver(messagesObserver)
+
             result?.let {
-                for (i in it.first.indices) {
-                    groupAdapter.add(MessageItem(it.first[i], it.second[i], it.third[i]))
+                groupAdapter.clear()
+
+                for (i in it.room.indices) {
+                    if (activeRoom == it.room[i]) //filter to one room
+                        groupAdapter.add(MessageItem(it.nick[i], it.date[i], it.msg[i]))
                     //todo first data must use addAll, next at every update only add
                 }
             }
-        })
+        }
+
+        viewModel.getMessages().observe(this, messagesObserver)
 
         //endregion
 
@@ -96,6 +107,8 @@ class ChatFragment : Fragment() {
                 for (i in it.indices) {
                     val btn = roomButtonStyler()
                     btn.text = getString(R.string.chat_button_room, i + 1)
+                    btn.tag = it[i] //keep room number in button tag
+                    setRoomButtonListener(btn)
                     flexboxLayoutRoomsButtonsContainer.addView(btn)
                 }
 
@@ -105,15 +118,29 @@ class ChatFragment : Fragment() {
         //endregion
     }
 
-    private fun startListeners() {
+    private fun setMainRoomSendButtonsListeners() {
+        mainRoomButton.setOnClickListener {
+            activeRoom = 0
+
+            viewModel.getMessages().observe(this, messagesObserver)
+        }
+
         sendButton.setOnClickListener {
             val textToSend = messageEditText.text.toString()
 
-            viewModel.sendMessage(0, textToSend).observe(this, Observer {
+            viewModel.sendMessage(activeRoom, textToSend).observe(this, Observer {
                 println(it)
             })
 
             messageEditText.text.clear()
+        }
+    }
+
+    private fun setRoomButtonListener(btn: MaterialButton) {
+        btn.setOnClickListener {
+            activeRoom = btn.tag as Int
+
+            viewModel.getMessages().observe(this, messagesObserver)
         }
     }
 
