@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
@@ -15,8 +14,6 @@ import pl.ordin.authorchat.R
 
 class SplashFragment : Fragment() {
 
-    private lateinit var viewModel: SplashViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,16 +21,15 @@ class SplashFragment : Fragment() {
         return inflater.inflate(R.layout.splash_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(SplashViewModel::class.java)
+    override fun onStart() {
+        super.onStart()
 
         redirectToSignIn()
     }
 
     private fun redirectToSignIn() {
         GlobalScope.launch {
-            delay(2000)
+            delay(1000)
 
             NavHostFragment.findNavController(navHostFragment).navigate(R.id.loginFragment)
         }
