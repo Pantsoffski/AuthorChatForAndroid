@@ -53,7 +53,7 @@ class SharedPreferencesHelper(c: Context) {
         }
 
     var rememberUserPref: Boolean
-        get() = prefs.getBoolean(REMEMBER_USER, true)
+        get() = prefs.getBoolean(REMEMBER_USER, false)
         set(value) {
             prefs.edit()
                 .putBoolean(REMEMBER_USER, value)

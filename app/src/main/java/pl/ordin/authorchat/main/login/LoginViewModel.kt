@@ -33,4 +33,8 @@ class LoginViewModel @Inject constructor(private val sharedPreferencesHelper: Sh
             )
         }
     }
+
+    fun userRemembered(): Boolean {
+        return sharedPreferencesHelper.rememberUserPref
+    }
 }

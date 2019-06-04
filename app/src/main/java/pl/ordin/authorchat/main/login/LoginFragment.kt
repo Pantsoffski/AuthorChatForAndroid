@@ -27,6 +27,10 @@ class LoginFragment : Fragment() {
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this) // must have for dagger injection
         super.onAttach(context)
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
+
+        redirectToChat()
     }
 
     override fun onCreateView(
@@ -38,8 +42,6 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
 
         getLastSignInDataIfExists()
 
@@ -86,6 +88,16 @@ class LoginFragment : Fragment() {
             // redirect to chat
             NavHostFragment.findNavController(navHostFragment).navigate(R.id.chatFragment)
         }
+    }
+
+    //endregion
+
+    //region Redirect
+
+    // redirect to chat instantly if user checked "remember user" option
+    private fun redirectToChat() {
+        if (viewModel.userRemembered())
+            NavHostFragment.findNavController(navHostFragment).navigate(R.id.chatFragment) // redirect to chat
     }
 
     //endregion
