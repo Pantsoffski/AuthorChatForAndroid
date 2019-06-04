@@ -91,6 +91,8 @@ class ChatFragment : Fragment() {
                     if (activeRoom == it.room[i]) //filter to one room
                         groupAdapter.add(MessageItem(it.nick[i], it.date[i], it.msg[i]))
                     //todo first data must use addAll, next at every update only add
+
+                    progressBar.visibility = View.GONE //remove progress bar
                 }
             }
         }
