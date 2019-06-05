@@ -3,6 +3,7 @@ package pl.ordin.authorchat.main.chat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.Transformations.switchMap
 import androidx.lifecycle.ViewModel
 import pl.ordin.data.network.apiservice.WordpressApi
 import pl.ordin.utility.retrofitlivedata.ApiResponse
@@ -15,25 +16,10 @@ class ChatViewModel @Inject constructor(
     private var sharedPreferencesHelper: SharedPreferencesHelper
 ) : ViewModel() {
 
-//    val messages = MediatorLiveData<WebsiteAnswer?>()
-//
-//    private val websiteMessagesServiceAnswer = Transformations.map(
-//        wordpressApi.websiteRest(
-//            "read",
-//            "",
-//            sharedPreferencesHelper.usernamePref,
-//            sharedPreferencesHelper.passwordPref,
-//            0
-//        )
-//    ) {
-//        if (it is ApiSuccessResponse) {
-//            WebsiteAnswer(it.body.nick, it.body.date, it.body.msg, it.body.room)
-//        } else
-//            null
-//    }
+    private var lastMessages: MutableMap<Int, WebsiteAnswer>? = null // necessarily to compare to push only new messages
 
-    fun getMessages(): LiveData<WebsiteAnswer?> {
-        return Transformations.switchMap(
+    fun getMessages(): LiveData<Map<Int, WebsiteAnswer>?> {
+        return switchMap(
             wordpressApi.websiteRest(
                 "read",
                 "",
@@ -42,10 +28,34 @@ class ChatViewModel @Inject constructor(
                 0
             )
         ) {
-            val data = MediatorLiveData<WebsiteAnswer?>()
+            val data = MediatorLiveData<Map<Int, WebsiteAnswer>?>()
 
             if (it is ApiSuccessResponse) {
-                data.postValue(WebsiteAnswer(it.body.nick, it.body.date, it.body.msg, it.body.room))
+
+                //val messagesToPush = WebsiteAnswer(it.body.nick, it.body.date, it.body.msg, it.body.room)
+                var messagesToPush = mutableMapOf<Int, WebsiteAnswer>()
+
+                for (i in it.body.id.indices) {
+                    messagesToPush[it.body.id[i]] =
+                        WebsiteAnswer(
+                            it.body.nick[i],
+                            it.body.date[i],
+                            it.body.msg[i],
+                            it.body.room[i]
+                        )
+                }
+
+                if (lastMessages == null) { // populate lastMessages if null
+                    lastMessages = messagesToPush
+                } else { // filter
+                    messagesToPush = messagesToPush.filterKeys { key ->
+                        !lastMessages!!.containsKey(key)
+                    } as MutableMap<Int, WebsiteAnswer>
+
+                    lastMessages!!.putAll(messagesToPush)
+                }
+
+                data.postValue(messagesToPush)
                 data
             } else
                 null
@@ -79,14 +89,16 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-//    fun refreshMessages() = websiteMessagesServiceAnswer?.let {
-//        messages.value = it.value
-//    }
+    fun clearLastMessages() {
+        lastMessages?.let {
+            it.keys.removeAll(it.keys)
+        }
+    }
 
     data class WebsiteAnswer(
-        val nick: List<String>,
-        val date: List<String>,
-        val msg: List<String>,
-        val room: List<Int>
+        val nick: String,
+        val date: String,
+        val msg: String,
+        val room: Int
     )
 }

@@ -19,6 +19,7 @@ interface WordpressApi {
     ): LiveData<ApiResponse<Result>>
 
     data class Result(
+        val id: List<Int>,
         val nick: List<String>,
         val msg: List<String>,
         val date: List<String>,

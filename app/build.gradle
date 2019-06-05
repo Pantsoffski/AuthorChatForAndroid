@@ -59,7 +59,8 @@ dependencies {
 
     //region Coroutines
 
-    implementation deps.jetbrains.coroutines
+    implementation deps.jetbrains.coroutines_android
+    implementation deps.jetbrains.coroutines_core
 
     //endregion
 

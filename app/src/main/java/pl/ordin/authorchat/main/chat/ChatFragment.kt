@@ -18,10 +18,15 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.chat_fragment.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import pl.ordin.authorchat.R
 import pl.ordin.authorchat.main.chat.item.MessageItem
 import pl.ordin.utility.viewmodelfactory.ViewModelFactory
+import java.util.*
 import javax.inject.Inject
+import kotlin.concurrent.fixedRateTimer
 
 class ChatFragment : Fragment() {
 
@@ -34,9 +39,11 @@ class ChatFragment : Fragment() {
         GroupAdapter<ViewHolder>()
     }
 
-    private lateinit var messagesObserver: Observer<ChatViewModel.WebsiteAnswer?>
+    private lateinit var messagesObserver: Observer<Map<Int, ChatViewModel.WebsiteAnswer>?>
 
     private var activeRoom = 0
+
+    private lateinit var messagesRefresher: Timer
 
     //region Lifecycle
 
@@ -62,6 +69,14 @@ class ChatFragment : Fragment() {
         startObservers()
 
         setMainRoomSendButtonsListeners()
+
+        refresher()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        messagesRefresher.cancel()
     }
 
     //endregion
@@ -69,8 +84,6 @@ class ChatFragment : Fragment() {
     //region Start due lifecycle
 
     private fun setUpGroupie() {
-        //groupAdapter.add(MessageItem("1", "2", "3"))
-
         chatRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@ChatFragment.context)
             adapter = groupAdapter
@@ -85,14 +98,15 @@ class ChatFragment : Fragment() {
             viewModel.getMessages().removeObserver(messagesObserver)
 
             result?.let {
-                groupAdapter.clear()
+                //groupAdapter.clear()
 
-                for (i in it.room.indices) {
-                    if (activeRoom == it.room[i]) //filter to one room
-                        groupAdapter.add(MessageItem(it.nick[i], it.date[i], it.msg[i]))
-                    //todo first data must use addAll, next at every update only add
+                for (item in it) {
+                    if (activeRoom == item.value.room) //filter to one room
+                        groupAdapter.add(MessageItem(item.value.nick, item.value.date, item.value.msg))
 
                     progressBar.visibility = View.GONE //remove progress bar
+
+                    moveToLastPosition()
                 }
             }
         }
@@ -124,7 +138,7 @@ class ChatFragment : Fragment() {
         mainRoomButton.setOnClickListener {
             activeRoom = 0
 
-            viewModel.getMessages().observe(this, messagesObserver)
+            doAfterRoomButtonPressed()
         }
 
         sendButton.setOnClickListener {
@@ -142,7 +156,20 @@ class ChatFragment : Fragment() {
         btn.setOnClickListener {
             activeRoom = btn.tag as Int
 
-            viewModel.getMessages().observe(this, messagesObserver)
+            doAfterRoomButtonPressed()
+        }
+    }
+
+    private fun refresher() {
+        messagesRefresher = fixedRateTimer(
+            name = "messages-refresher",
+            initialDelay = 3000,
+            period = 5000
+        ) {
+            // Dispatchers.Main to observe at main thread
+            GlobalScope.launch(Dispatchers.Main) {
+                viewModel.getMessages().observe(this@ChatFragment, messagesObserver)
+            }
         }
     }
 
@@ -162,6 +189,19 @@ class ChatFragment : Fragment() {
 
         return button
     }
+
+    private fun doAfterRoomButtonPressed() {
+        groupAdapter.clear()
+
+        progressBar.visibility = View.VISIBLE
+
+        viewModel.getMessages().observe(this, messagesObserver)
+
+        viewModel.clearLastMessages()
+    }
+
+    private fun moveToLastPosition() =
+        chatRecyclerView.smoothScrollToPosition(if (groupAdapter.itemCount == 0) groupAdapter.itemCount else groupAdapter.itemCount - 1)
 
     // dp to px converter
     private fun Int.toPx(): Int = (this * getSystem().displayMetrics.density).toInt()
