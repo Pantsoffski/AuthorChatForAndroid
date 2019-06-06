@@ -11,7 +11,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!-- region Button -->
+    <!-- region Sign In Button -->
 
     <style name="AuthorChat.Widget.Button" parent="Widget.MaterialComponents.Button"/>
 

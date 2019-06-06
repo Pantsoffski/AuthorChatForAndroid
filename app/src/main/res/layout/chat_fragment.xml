@@ -32,6 +32,7 @@
                 android:text="@string/chat_button_main_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorAccent"
                 android:id="@+id/mainRoomButton"
                 style="@style/MaterialButtonsStyle"/>
 

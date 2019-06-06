@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -42,6 +43,7 @@ class ChatFragment : Fragment() {
     private lateinit var messagesObserver: Observer<Map<Int, ChatViewModel.WebsiteAnswer>?>
 
     private var activeRoom = 0
+    private var activeButtons = mutableListOf<MaterialButton>()
 
     private lateinit var messagesRefresher: Timer
 
@@ -119,6 +121,11 @@ class ChatFragment : Fragment() {
 
         viewModel.getRooms().observe(this, Observer { result ->
             result?.let {
+                //clean activeButtons
+                activeButtons.removeAll(activeButtons)
+
+                //add main button to list
+                activeButtons.add(mainRoomButton)
 
                 for (i in it.indices) {
                     val btn = roomButtonStyler()
@@ -126,6 +133,9 @@ class ChatFragment : Fragment() {
                     btn.tag = it[i] //keep room number in button tag
                     setRoomButtonListener(btn)
                     flexboxLayoutRoomsButtonsContainer.addView(btn)
+
+                    //add button to list
+                    activeButtons.add(btn)
                 }
 
             }
@@ -136,6 +146,8 @@ class ChatFragment : Fragment() {
 
     private fun setMainRoomSendButtonsListeners() {
         mainRoomButton.setOnClickListener {
+            buttonHighlighter(it as MaterialButton)
+
             activeRoom = 0
 
             doAfterRoomButtonPressed()
@@ -154,6 +166,8 @@ class ChatFragment : Fragment() {
 
     private fun setRoomButtonListener(btn: MaterialButton) {
         btn.setOnClickListener {
+            buttonHighlighter(it as MaterialButton)
+
             activeRoom = btn.tag as Int
 
             doAfterRoomButtonPressed()
@@ -174,6 +188,17 @@ class ChatFragment : Fragment() {
     }
 
     //endregion
+
+    private fun buttonHighlighter(button: MaterialButton) {
+        //set background color to make button highlighted
+        button.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
+
+        //remove active color from last active button (make it inactive)
+        activeButtons.map { btn ->
+            if (btn.tag != button.tag)
+                btn.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+        }
+    }
 
     private fun roomButtonStyler(): MaterialButton {
         val button = MaterialButton(ContextThemeWrapper(this.context, R.style.MaterialButtonsStyle), null, 0)
