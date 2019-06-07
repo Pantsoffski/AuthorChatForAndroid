@@ -102,6 +102,8 @@ class ChatFragment : Fragment() {
         super.onDestroy()
 
         messagesRefresher.cancel()
+
+        roomsRefresher.cancel()
     }
 
     //endregion
