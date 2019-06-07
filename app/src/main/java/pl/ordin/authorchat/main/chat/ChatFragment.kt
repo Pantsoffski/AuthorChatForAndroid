@@ -31,21 +31,41 @@ import kotlin.concurrent.fixedRateTimer
 
 class ChatFragment : Fragment() {
 
+    //region ViewModel
+
     @Inject
     lateinit var viewModelFactory: ViewModelFactory<ChatViewModel>
 
     private lateinit var viewModel: ChatViewModel
 
+    //endregion
+
+    //region RecyclerView
+
     private val groupAdapter by lazy {
         GroupAdapter<ViewHolder>()
     }
 
+    //endregion
+
+    //region Observers
+
     private lateinit var messagesObserver: Observer<Map<Int, ChatViewModel.WebsiteAnswer>?>
+
+    //endregion
+
+    //region Rooms status
 
     private var activeRoom = 0
     private var activeButtons = mutableListOf<MaterialButton>()
 
+    //endregion
+
+    //region Refresher
+
     private lateinit var messagesRefresher: Timer
+
+    //endregion
 
     //region Lifecycle
 
@@ -108,7 +128,13 @@ class ChatFragment : Fragment() {
 
                     progressBar.visibility = View.GONE //remove progress bar
 
-                    moveToLastPosition()
+                    //move to last position
+                    chatRecyclerView.smoothScrollToPosition(
+                        if (groupAdapter.itemCount == 0)
+                            groupAdapter.itemCount
+                        else
+                            groupAdapter.itemCount - 1
+                    )
                 }
             }
         }
@@ -189,6 +215,8 @@ class ChatFragment : Fragment() {
 
     //endregion
 
+    //region Buttons handling
+
     private fun buttonHighlighter(button: MaterialButton) {
         //set background color to make button highlighted
         button.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
@@ -225,9 +253,11 @@ class ChatFragment : Fragment() {
         viewModel.clearLastMessages()
     }
 
-    private fun moveToLastPosition() =
-        chatRecyclerView.smoothScrollToPosition(if (groupAdapter.itemCount == 0) groupAdapter.itemCount else groupAdapter.itemCount - 1)
+    //endregion
 
-    // dp to px converter
+    //region DP/PX converter
+
     private fun Int.toPx(): Int = (this * getSystem().displayMetrics.density).toInt()
+
+    //endregion
 }
