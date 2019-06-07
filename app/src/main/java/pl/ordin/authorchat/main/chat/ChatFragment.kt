@@ -35,7 +35,6 @@ class ChatFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory<ChatViewModel>
-
     private lateinit var viewModel: ChatViewModel
 
     //endregion
@@ -65,7 +64,6 @@ class ChatFragment : Fragment() {
     //region Refreshers
 
     private lateinit var messagesRefresher: Timer
-
     private lateinit var roomsRefresher: Timer
 
     //endregion
@@ -155,6 +153,12 @@ class ChatFragment : Fragment() {
 
                 //add main button to list
                 activeButtons.add(mainRoomButton)
+
+                //remove old rooms before add new ones
+                flexboxLayoutRoomsButtonsContainer.removeViewsInLayout(
+                    1,
+                    flexboxLayoutRoomsButtonsContainer.flexItemCount - 1
+                )
 
                 for (i in it.indices) {
                     val btn = roomButtonStyler()
