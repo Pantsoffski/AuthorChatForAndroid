@@ -51,6 +51,7 @@ class ChatFragment : Fragment() {
     //region Observers
 
     private lateinit var messagesObserver: Observer<Map<Int, ChatViewModel.WebsiteAnswer>?>
+    private lateinit var roomsObserver: Observer<List<Int>?>
 
     //endregion
 
@@ -61,9 +62,11 @@ class ChatFragment : Fragment() {
 
     //endregion
 
-    //region Refresher
+    //region Refreshers
 
     private lateinit var messagesRefresher: Timer
+
+    private lateinit var roomsRefresher: Timer
 
     //endregion
 
@@ -114,7 +117,7 @@ class ChatFragment : Fragment() {
 
     private fun startObservers() {
 
-        //region Get messages
+        //Get messages
 
         messagesObserver = Observer { result ->
             viewModel.getMessages().removeObserver(messagesObserver)
@@ -141,11 +144,9 @@ class ChatFragment : Fragment() {
 
         viewModel.getMessages().observe(this, messagesObserver)
 
-        //endregion
+        //Get rooms for user
 
-        //region Get rooms for user
-
-        viewModel.getRooms().observe(this, Observer { result ->
+        roomsObserver = Observer { result ->
             result?.let {
                 //clean activeButtons
                 activeButtons.removeAll(activeButtons)
@@ -165,9 +166,9 @@ class ChatFragment : Fragment() {
                 }
 
             }
-        })
+        }
 
-        //endregion
+        viewModel.getRooms().observe(this, roomsObserver)
     }
 
     private fun setMainRoomSendButtonsListeners() {
@@ -209,6 +210,17 @@ class ChatFragment : Fragment() {
             // Dispatchers.Main to observe at main thread
             GlobalScope.launch(Dispatchers.Main) {
                 viewModel.getMessages().observe(this@ChatFragment, messagesObserver)
+            }
+        }
+
+        roomsRefresher = fixedRateTimer(
+            name = "rooms-refresher",
+            initialDelay = 5000,
+            period = 9000
+        ) {
+            // Dispatchers.Main to observe at main thread
+            GlobalScope.launch(Dispatchers.Main) {
+                viewModel.getRooms().observe(this@ChatFragment, roomsObserver)
             }
         }
     }
