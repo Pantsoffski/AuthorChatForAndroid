@@ -21,6 +21,7 @@ versions.navigation = "2.1.0-alpha03"
 versions.okhttp_logging_interceptor = "3.14.1"
 versions.retrofit = "2.5.0"
 versions.stetho = "1.5.1"
+versions.work = "2.0.1"
 deps.versions = versions
 
 //endregion
@@ -64,6 +65,7 @@ deps.dagger = dagger
 def google = [:]
 google.material = "com.google.android.material:material:$versions.google_material"
 google.flexbox = "com.google.android:flexbox:$versions.flexbox"
+google.work = "androidx.work:work-runtime-ktx:$versions.work"
 deps.google = google
 
 //endregion
