@@ -7,6 +7,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 import pl.ordin.authorchat.main.MainModule
 import pl.ordin.authorchat.main.chat.ChatModule
 import pl.ordin.authorchat.main.login.LoginModule
+import pl.ordin.authorchat.notifications.NotificationsWorkerModule
 import pl.ordin.data.network.http.HttpModule
 import pl.ordin.utility.sharedpreferences.SharedPreferencesModule
 import javax.inject.Singleton
@@ -16,6 +17,7 @@ import javax.inject.Singleton
     modules = [
         AndroidSupportInjectionModule::class,
         MainModule::class,
+        NotificationsWorkerModule::class,
         LoginModule::class,
         ChatModule::class,
         HttpModule::class,
