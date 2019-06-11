@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class NotificationsWorkerModule {
+abstract class NotificationsServiceModule {
 
     @ContributesAndroidInjector
-    abstract fun contributeNotificationsWorker(): NotificationsWorker
+    abstract fun contributeNotificationsWorker(): NotificationsService
 }

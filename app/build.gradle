@@ -84,12 +84,6 @@ dependencies {
 
     //endregion
 
-    //region Google Work
-
-    implementation deps.google.work
-
-    //endregion
-
     //region Kotlin
 
     implementation deps.jetbrains.kotlin

@@ -2,16 +2,19 @@ package pl.ordin.authorchat.app
 
 import android.app.Activity
 import android.app.Application
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
+import android.app.Service
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
 import com.facebook.stetho.Stetho
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
-import pl.ordin.authorchat.notifications.NotificationsWorker
-import java.util.concurrent.TimeUnit
+import dagger.android.HasServiceInjector
+import pl.ordin.authorchat.notifications.NotificationsService
 import javax.inject.Inject
 
-class AuthorChat : Application(), HasActivityInjector {
+class AuthorChat : Application(), HasActivityInjector, HasServiceInjector {
 
     //region Activity Injector
 
@@ -19,6 +22,15 @@ class AuthorChat : Application(), HasActivityInjector {
     lateinit var activityInjector: DispatchingAndroidInjector<Activity>
 
     override fun activityInjector() = activityInjector
+
+    //endregion
+
+    //region Service Injector
+
+    @Inject
+    lateinit var serviceInjector: DispatchingAndroidInjector<Service>
+
+    override fun serviceInjector() = serviceInjector
 
     //endregion
 
@@ -30,8 +42,8 @@ class AuthorChat : Application(), HasActivityInjector {
         // Initialize dependency graph
         initializeDependencyInjection()
 
-        // Initialize Notifications Worker
-        initializeNotificationsWorker()
+        // Initialize Notifications Service
+        initializeNotificationsService()
 
         // Initialize tools
         initializeStetho()
@@ -50,13 +62,16 @@ class AuthorChat : Application(), HasActivityInjector {
 
     //endregion
 
-    //region Notifications Worker
+    //region Notifications Service
 
-    private fun initializeNotificationsWorker() {
-        val notificationsWork = PeriodicWorkRequestBuilder<NotificationsWorker>(15, TimeUnit.MINUTES)
+    private fun initializeNotificationsService() {
+        val notificationsJob = JobInfo.Builder(666, ComponentName(this, NotificationsService::class.java))
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+            .setPeriodic(900000)
             .build()
 
-        WorkManager.getInstance().enqueue(notificationsWork)
+        val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        jobScheduler.schedule(notificationsJob)
     }
 
     //endregion
