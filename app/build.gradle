@@ -78,6 +78,12 @@ dependencies {
 
     //endregion
 
+    //region Google Firebase Messaging
+
+    implementation deps.google.firebase_messaging
+
+    //endregion
+
     //region Google Flexbox
 
     implementation deps.google.flexbox

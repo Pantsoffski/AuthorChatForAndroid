@@ -12,6 +12,7 @@ versions.constraint_layout = "1.1.3"
 versions.core_ktx = "1.0.2"
 versions.coroutines = "1.2.1"
 versions.dagger = "2.22.1"
+versions.firebase_messaging = "18.0.0"
 versions.flexbox = "1.1.0"
 versions.google_material = "1.1.0-alpha06"
 versions.groupie = "2.3.0"
@@ -63,6 +64,7 @@ deps.dagger = dagger
 
 def google = [:]
 google.material = "com.google.android.material:material:$versions.google_material"
+google.firebase_messaging = "com.google.firebase:firebase-messaging:$versions.firebase_messaging"
 google.flexbox = "com.google.android:flexbox:$versions.flexbox"
 deps.google = google
 
