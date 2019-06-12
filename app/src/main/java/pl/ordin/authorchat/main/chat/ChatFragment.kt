@@ -94,6 +94,8 @@ class ChatFragment : Fragment() {
         setMainRoomSendButtonsListeners()
 
         refresher()
+
+        viewModel.subscribeToNotifications() //todo try to put it when you are sure that log in was successful
     }
 
     override fun onDestroy() {

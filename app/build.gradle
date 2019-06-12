@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 //region experimental for Groupie
 
@@ -75,6 +76,12 @@ dependencies {
     //region Google Material
 
     implementation deps.google.material
+
+    //endregion
+
+    //region Google Firebase Core
+
+    implementation deps.google.firebase_core
 
     //endregion
 

@@ -1,10 +1,12 @@
 package pl.ordin.authorchat.main.chat
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.Transformations.switchMap
 import androidx.lifecycle.ViewModel
+import com.google.firebase.messaging.FirebaseMessaging
 import pl.ordin.data.network.apiservice.WordpressApi
 import pl.ordin.utility.retrofitlivedata.ApiResponse
 import pl.ordin.utility.retrofitlivedata.ApiSuccessResponse
@@ -94,6 +96,22 @@ class ChatViewModel @Inject constructor(
             it.keys.removeAll(it.keys)
         }
     }
+
+    //region Notifications Service
+
+    fun subscribeToNotifications() {
+        val topic = sharedPreferencesHelper.websiteUrlPref
+
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful)
+                    Log.i("Topic subscription was successful to topic", topic)
+                else
+                    Log.e("Topic subscription was not successful to topic", topic)
+            }
+    }
+
+    //endregion
 
     data class WebsiteAnswer(
         val nick: String,
