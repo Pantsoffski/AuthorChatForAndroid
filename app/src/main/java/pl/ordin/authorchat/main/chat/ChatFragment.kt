@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -127,19 +128,27 @@ class ChatFragment : Fragment() {
             result?.let {
                 //groupAdapter.clear()
 
-                for (item in it) {
-                    if (activeRoom == item.value.room) //filter to one room
-                        groupAdapter.add(MessageItem(item.value.nick, item.value.date, item.value.msg))
+                if (it[0]?.errorResponse == null) {
 
-                    progressBar.visibility = View.GONE //remove progress bar
+                    for (item in it) {
+                        if (activeRoom == item.value.room) //filter to one room
+                            groupAdapter.add(MessageItem(item.value.nick, item.value.date, item.value.msg))
 
-                    //move to last position
-                    chatRecyclerView.smoothScrollToPosition(
-                        if (groupAdapter.itemCount == 0)
-                            groupAdapter.itemCount
-                        else
-                            groupAdapter.itemCount - 1
-                    )
+                        progressBar.visibility = View.GONE //remove progress bar
+
+                        //move to last position
+                        chatRecyclerView.smoothScrollToPosition(
+                            if (groupAdapter.itemCount == 0)
+                                groupAdapter.itemCount
+                            else
+                                groupAdapter.itemCount - 1
+                        )
+                    }
+                } else {
+                    MaterialDialog(context!!).show {
+                        title(text = "Error")
+                        message(text = "Something is fucky!")
+                    }
                 }
             }
         }

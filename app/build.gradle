@@ -97,22 +97,28 @@ dependencies {
 
     //endregion
 
+    //region Groupie
+
+    implementation deps.groupie.core
+    implementation deps.groupie.kotlin_extensions
+
+    //endregion
+
     //region Kotlin
 
     implementation deps.jetbrains.kotlin
 
     //endregion
 
-    //region Modules
+    //region Material Dialogs
 
-    implementation project(':data')
+    implementation deps.dialogs.material_dialogs
 
     //endregion
 
-    //region Groupie
+    //region Modules
 
-    implementation deps.groupie.core
-    implementation deps.groupie.kotlin_extensions
+    implementation project(':data')
 
     //endregion
 }

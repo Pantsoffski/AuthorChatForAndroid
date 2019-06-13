@@ -8,6 +8,7 @@ import androidx.lifecycle.Transformations.switchMap
 import androidx.lifecycle.ViewModel
 import com.google.firebase.messaging.FirebaseMessaging
 import pl.ordin.data.network.apiservice.WordpressApi
+import pl.ordin.utility.retrofitlivedata.ApiErrorResponse
 import pl.ordin.utility.retrofitlivedata.ApiResponse
 import pl.ordin.utility.retrofitlivedata.ApiSuccessResponse
 import pl.ordin.utility.sharedpreferences.SharedPreferencesHelper
@@ -32,35 +33,42 @@ class ChatViewModel @Inject constructor(
         ) {
             val data = MediatorLiveData<Map<Int, WebsiteAnswer>?>()
 
-            if (it is ApiSuccessResponse) {
+            var messagesToPush = mutableMapOf<Int, WebsiteAnswer>()
 
-                //val messagesToPush = WebsiteAnswer(it.body.nick, it.body.date, it.body.msg, it.body.room)
-                var messagesToPush = mutableMapOf<Int, WebsiteAnswer>()
+            when (it) {
+                is ApiSuccessResponse -> {
 
-                for (i in it.body.id.indices) {
-                    messagesToPush[it.body.id[i]] =
-                        WebsiteAnswer(
-                            it.body.nick[i],
-                            it.body.date[i],
-                            it.body.msg[i],
-                            it.body.room[i]
-                        )
+                    for (i in it.body.id.indices) {
+                        messagesToPush[it.body.id[i]] =
+                            WebsiteAnswer(
+                                it.body.nick[i],
+                                it.body.date[i],
+                                it.body.msg[i],
+                                it.body.room[i],
+                                null
+                            )
+                    }
+
+                    if (lastMessages == null) { // populate lastMessages if null
+                        lastMessages = messagesToPush
+                    } else { // filter
+                        messagesToPush = messagesToPush.filterKeys { key ->
+                            !lastMessages!!.containsKey(key)
+                        } as MutableMap<Int, WebsiteAnswer>
+
+                        lastMessages!!.putAll(messagesToPush)
+                    }
+
+                    data.postValue(messagesToPush)
+                    data
                 }
-
-                if (lastMessages == null) { // populate lastMessages if null
-                    lastMessages = messagesToPush
-                } else { // filter
-                    messagesToPush = messagesToPush.filterKeys { key ->
-                        !lastMessages!!.containsKey(key)
-                    } as MutableMap<Int, WebsiteAnswer>
-
-                    lastMessages!!.putAll(messagesToPush)
+                is ApiErrorResponse -> {
+                    messagesToPush[0] = WebsiteAnswer("", "", "", 0, it.errorMessage)
+                    data.postValue(messagesToPush)
+                    data
                 }
-
-                data.postValue(messagesToPush)
-                data
-            } else
-                null
+                else -> null
+            }
         }
     }
 
@@ -83,9 +91,9 @@ class ChatViewModel @Inject constructor(
                 sharedPreferencesHelper.passwordPref,
                 0
             )
-        ) {
-            if (it is ApiSuccessResponse)
-                it.body.room
+        ) { response ->
+            if (response is ApiSuccessResponse)
+                response.body.room
             else
                 null
         }
@@ -117,6 +125,7 @@ class ChatViewModel @Inject constructor(
         val nick: String,
         val date: String,
         val msg: String,
-        val room: Int
+        val room: Int,
+        val errorResponse: String?
     )
 }
