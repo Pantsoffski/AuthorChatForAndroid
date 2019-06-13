@@ -123,11 +123,13 @@ class ChatFragment : Fragment() {
         //Get messages
 
         messagesObserver = Observer { result ->
+
             viewModel.getMessages().removeObserver(messagesObserver)
 
             result?.let {
                 //groupAdapter.clear()
 
+                // check if there any error
                 if (it[0]?.errorResponse == null) {
 
                     for (item in it) {
@@ -144,11 +146,12 @@ class ChatFragment : Fragment() {
                                 groupAdapter.itemCount - 1
                         )
                     }
-                } else {
-                    MaterialDialog(context!!).show {
-                        title(text = "Error")
-                        message(text = "Something is fucky!")
-                    }
+                } else { // if there is error
+                    errorHandling(it.getValue(0).errorResponse!!)
+
+                    // stop refreshing
+                    messagesRefresher.cancel()
+                    roomsRefresher.cancel()
                 }
             }
         }
@@ -181,7 +184,6 @@ class ChatFragment : Fragment() {
                     //add button to list
                     activeButtons.add(btn)
                 }
-
             }
         }
 
@@ -280,6 +282,25 @@ class ChatFragment : Fragment() {
         viewModel.getMessages().observe(this, messagesObserver)
 
         viewModel.clearLastMessages()
+    }
+
+    //endregion
+
+    //region Error Handling
+
+    private fun errorHandling(error: String) {
+        MaterialDialog(context!!).show {
+            title(text = "Error")
+            message(text = error)
+
+            negativeButton(text = "Go Back") { dialog ->
+                // remove dialog
+                dialog.cancel()
+
+                // go back
+                fragmentManager?.popBackStack()
+            }
+        }
     }
 
     //endregion
