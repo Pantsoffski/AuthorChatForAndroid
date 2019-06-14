@@ -20,7 +20,6 @@ class HttpModule {
     //region Retrofit
 
     @Provides
-    @Singleton
     fun provideServerRetrofit(client: OkHttpClient, url: String): WordpressApi {
         val retrofit = Retrofit.Builder()
             .baseUrl(url)
@@ -35,11 +34,8 @@ class HttpModule {
     }
 
     @Provides
-    @Singleton
     fun getWebsiteUrl(context: Context): String {
-        val sharedPreferencesHelper = SharedPreferencesHelper(context)
-
-        return with(sharedPreferencesHelper) {
+        return with(SharedPreferencesHelper(context)) {
             websiteUrlPrefixPref + websiteUrlPref
         }
     }
