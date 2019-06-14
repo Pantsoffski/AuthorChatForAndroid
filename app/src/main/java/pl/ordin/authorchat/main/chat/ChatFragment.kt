@@ -289,11 +289,19 @@ class ChatFragment : Fragment() {
     //region Error Handling
 
     private fun errorHandling(error: String) {
-        MaterialDialog(context!!).show {
-            title(text = "Error")
-            message(text = error)
+        val errorMessage = when {
+            error.contains("host") -> getString(R.string.error_dialog_message_invalid_host)
+            error.contains("invalid_username") -> getString(R.string.error_dialog_message_invalid_username)
+            error.contains("incorrect_password") -> getString(R.string.error_dialog_message_invalid_password)
+            else -> getString(R.string.error_dialog_message_unknown)
+        }
 
-            negativeButton(text = "Go Back") { dialog ->
+        MaterialDialog(context!!).show {
+            icon(R.drawable.ic_twotone_error_icon)
+            title(R.string.error_dialog_title)
+            message(text = errorMessage)
+
+            negativeButton(R.string.error_dialog_back_button) { dialog ->
                 // remove dialog
                 dialog.cancel()
 

@@ -4,7 +4,7 @@
 
     <string name="app_name">Author Chat</string>
 
-    <!-- endregion -->S
+    <!-- endregion -->
 
     <!-- region Login -->
 
@@ -27,6 +27,22 @@
     <string name="chat_message_hint">Your message…</string>
     <string name="chat_button_main_room">Main Room</string>
     <string name="chat_button_room">Room %1$d</string>
+
+    <!-- endregion -->
+
+    <!-- region Errors -->
+
+    <string name="error_dialog_title">Oh no…</string>
+    <string name="error_dialog_back_button">Go Back</string>
+    <string name="error_dialog_message_invalid_host">Unable to resolve host. Please go back and check your website
+        url.
+    </string>
+    <string name="error_dialog_message_invalid_username">Invalid username. Please go back and check your username.
+    </string>
+    <string name="error_dialog_message_invalid_password">Wrong password for username. Please go back and check your
+        password.
+    </string>
+    <string name="error_dialog_message_unknown">Unknown error. I really don\'t know what to do…</string>
 
     <!-- endregion -->
 </resources>
