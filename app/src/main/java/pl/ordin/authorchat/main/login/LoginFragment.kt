@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
+import com.afollestad.materialdialogs.MaterialDialog
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.login_fragment.*
@@ -21,6 +23,12 @@ class LoginFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelFactory<LoginViewModel>
 
     private lateinit var viewModel: LoginViewModel
+
+    //region Observers
+
+    private lateinit var testConnectionObserver: Observer<String>
+
+    //endregion
 
     //region Lifecycle
 
@@ -85,9 +93,42 @@ class LoginFragment : Fragment() {
                 rememberUser = rememberUserCheckBox.isChecked
             )
 
-            // redirect to chat
-            NavHostFragment.findNavController(navHostFragment).navigate(R.id.chatFragment)
+            // start progress bar before testing connection
+            progressBar.visibility = View.VISIBLE
+            // show background dim
+            backgroundDim.visibility = View.VISIBLE
+
+            testConnection()
         }
+    }
+
+    //endregion
+
+    //region Connection Tester
+
+    private fun testConnection() {
+        testConnectionObserver = Observer { result ->
+
+            viewModel.testConnection().removeObserver(testConnectionObserver)
+
+            when {
+                result.contains("success") -> {
+                    // redirect to chat
+                    NavHostFragment.findNavController(navHostFragment).navigate(R.id.chatFragment)
+                }
+                else -> {
+                    // popup dialog with error message
+                    errorHandling(result)
+                }
+            }
+
+            // stop progress bar
+            progressBar.visibility = View.GONE
+            //remove background dim
+            backgroundDim.visibility = View.GONE
+        }
+
+        viewModel.testConnection().observe(this, testConnectionObserver)
     }
 
     //endregion
@@ -98,6 +139,30 @@ class LoginFragment : Fragment() {
     private fun redirectToChat() {
         if (viewModel.userRemembered())
             NavHostFragment.findNavController(navHostFragment).navigate(R.id.chatFragment) // redirect to chat
+    }
+
+    //endregion
+
+    //region Error Handling
+
+    private fun errorHandling(error: String) {
+        val errorMessage = when {
+            error.contains("host") -> getString(R.string.error_dialog_message_invalid_host)
+            error.contains("invalid_username") -> getString(R.string.error_dialog_message_invalid_username)
+            error.contains("incorrect_password") -> getString(R.string.error_dialog_message_invalid_password)
+            else -> getString(R.string.error_dialog_message_unknown)
+        }
+
+        MaterialDialog(context!!).show {
+            icon(R.drawable.ic_twotone_error_icon)
+            title(R.string.error_dialog_title)
+            message(text = errorMessage)
+
+            negativeButton(R.string.error_dialog_negative_button) { dialog ->
+                // remove dialog
+                dialog.cancel()
+            }
+        }
     }
 
     //endregion

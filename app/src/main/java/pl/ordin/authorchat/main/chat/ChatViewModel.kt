@@ -8,7 +8,6 @@ import androidx.lifecycle.Transformations.switchMap
 import androidx.lifecycle.ViewModel
 import com.google.firebase.messaging.FirebaseMessaging
 import pl.ordin.data.network.apiservice.WordpressApi
-import pl.ordin.utility.retrofitlivedata.ApiErrorResponse
 import pl.ordin.utility.retrofitlivedata.ApiResponse
 import pl.ordin.utility.retrofitlivedata.ApiSuccessResponse
 import pl.ordin.utility.sharedpreferences.SharedPreferencesHelper
@@ -51,8 +50,7 @@ class ChatViewModel @Inject constructor(
                                 it.body.nick[i],
                                 datePreparation(it.body.date[i]), // convert UTC date to local user date
                                 it.body.msg[i],
-                                it.body.room[i],
-                                null
+                                it.body.room[i]
                             )
                     }
 
@@ -66,12 +64,6 @@ class ChatViewModel @Inject constructor(
                         lastMessages!!.putAll(messagesToPush)
                     }
 
-                    data.postValue(messagesToPush)
-                    data
-                }
-
-                is ApiErrorResponse -> {
-                    messagesToPush[0] = WebsiteAnswer("", "", "", 0, it.errorMessage)
                     data.postValue(messagesToPush)
                     data
                 }
@@ -156,8 +148,7 @@ class ChatViewModel @Inject constructor(
         val nick: String,
         val date: String,
         val msg: String,
-        val room: Int,
-        val errorResponse: String?
+        val room: Int
     )
 
     //endregion

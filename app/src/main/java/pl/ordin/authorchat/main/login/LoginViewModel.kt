@@ -1,10 +1,43 @@
 package pl.ordin.authorchat.main.login
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import pl.ordin.data.network.apiservice.WordpressApi
+import pl.ordin.utility.retrofitlivedata.ApiErrorResponse
 import pl.ordin.utility.sharedpreferences.SharedPreferencesHelper
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor(private val sharedPreferencesHelper: SharedPreferencesHelper) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private var wordpressApi: WordpressApi,
+    private val sharedPreferencesHelper: SharedPreferencesHelper
+) : ViewModel() {
+
+    fun testConnection(): LiveData<String> {
+        return Transformations.switchMap(
+            wordpressApi.websiteRest(
+                "read",
+                "",
+                sharedPreferencesHelper.usernamePref,
+                sharedPreferencesHelper.passwordPref,
+                0
+            )
+        ) {
+            val response = MediatorLiveData<String>()
+
+            when (it) {
+                is ApiErrorResponse -> {
+                    response.value = it.errorMessage
+                    response
+                }
+                else -> {
+                    response.value = "success"
+                    response
+                }
+            }
+        }
+    }
 
     fun saveSignInData(
         websitePrefix: String,

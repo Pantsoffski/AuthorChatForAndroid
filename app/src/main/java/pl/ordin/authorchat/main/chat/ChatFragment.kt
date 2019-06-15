@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -103,7 +102,6 @@ class ChatFragment : Fragment() {
         super.onDestroy()
 
         messagesRefresher.cancel()
-
         roomsRefresher.cancel()
     }
 
@@ -128,30 +126,19 @@ class ChatFragment : Fragment() {
 
             result?.let {
                 //groupAdapter.clear()
+                for (item in it) {
+                    if (activeRoom == item.value.room) //filter to one room
+                        groupAdapter.add(MessageItem(item.value.nick, item.value.date, item.value.msg))
 
-                // check if there any error
-                if (it[0]?.errorResponse == null) {
+                    progressBar.visibility = View.GONE //remove progress bar
 
-                    for (item in it) {
-                        if (activeRoom == item.value.room) //filter to one room
-                            groupAdapter.add(MessageItem(item.value.nick, item.value.date, item.value.msg))
-
-                        progressBar.visibility = View.GONE //remove progress bar
-
-                        //move to last position
-                        chatRecyclerView.smoothScrollToPosition(
-                            if (groupAdapter.itemCount == 0)
-                                groupAdapter.itemCount
-                            else
-                                groupAdapter.itemCount - 1
-                        )
-                    }
-                } else { // if there is error
-                    errorHandling(it.getValue(0).errorResponse!!)
-
-                    // stop refreshing
-                    messagesRefresher.cancel()
-                    roomsRefresher.cancel()
+                    //move to last position
+                    chatRecyclerView.smoothScrollToPosition(
+                        if (groupAdapter.itemCount == 0)
+                            groupAdapter.itemCount
+                        else
+                            groupAdapter.itemCount - 1
+                    )
                 }
             }
         }
@@ -282,33 +269,6 @@ class ChatFragment : Fragment() {
         viewModel.getMessages().observe(this, messagesObserver)
 
         viewModel.clearLastMessages()
-    }
-
-    //endregion
-
-    //region Error Handling
-
-    private fun errorHandling(error: String) {
-        val errorMessage = when {
-            error.contains("host") -> getString(R.string.error_dialog_message_invalid_host)
-            error.contains("invalid_username") -> getString(R.string.error_dialog_message_invalid_username)
-            error.contains("incorrect_password") -> getString(R.string.error_dialog_message_invalid_password)
-            else -> getString(R.string.error_dialog_message_unknown)
-        }
-
-        MaterialDialog(context!!).show {
-            icon(R.drawable.ic_twotone_error_icon)
-            title(R.string.error_dialog_title)
-            message(text = errorMessage)
-
-            negativeButton(R.string.error_dialog_back_button) { dialog ->
-                // remove dialog
-                dialog.cancel()
-
-                // go back
-                fragmentManager?.popBackStack()
-            }
-        }
     }
 
     //endregion

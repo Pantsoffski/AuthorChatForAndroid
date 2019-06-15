@@ -33,7 +33,7 @@
     <!-- region Errors -->
 
     <string name="error_dialog_title">Oh no…</string>
-    <string name="error_dialog_back_button">Go Back</string>
+    <string name="error_dialog_negative_button">Close</string>
     <string name="error_dialog_message_invalid_host">Unable to resolve host. Please go back and check your website
         url.
     </string>
