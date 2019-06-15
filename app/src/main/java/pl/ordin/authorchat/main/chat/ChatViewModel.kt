@@ -12,6 +12,8 @@ import pl.ordin.utility.retrofitlivedata.ApiErrorResponse
 import pl.ordin.utility.retrofitlivedata.ApiResponse
 import pl.ordin.utility.retrofitlivedata.ApiSuccessResponse
 import pl.ordin.utility.sharedpreferences.SharedPreferencesHelper
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class ChatViewModel @Inject constructor(
@@ -19,7 +21,13 @@ class ChatViewModel @Inject constructor(
     private var sharedPreferencesHelper: SharedPreferencesHelper
 ) : ViewModel() {
 
+    //region Last Messages
+
     private var lastMessages: MutableMap<Int, WebsiteAnswer>? = null // necessarily to compare to push only new messages
+
+    //endregion
+
+    //region Messages Handling
 
     fun getMessages(): LiveData<Map<Int, WebsiteAnswer>?> {
         return switchMap(
@@ -37,12 +45,11 @@ class ChatViewModel @Inject constructor(
 
             when (it) {
                 is ApiSuccessResponse -> {
-
                     for (i in it.body.id.indices) {
                         messagesToPush[it.body.id[i]] =
                             WebsiteAnswer(
                                 it.body.nick[i],
-                                it.body.date[i],
+                                datePreparation(it.body.date[i]), // convert UTC date to local user date
                                 it.body.msg[i],
                                 it.body.room[i],
                                 null
@@ -62,6 +69,7 @@ class ChatViewModel @Inject constructor(
                     data.postValue(messagesToPush)
                     data
                 }
+
                 is ApiErrorResponse -> {
                     messagesToPush[0] = WebsiteAnswer("", "", "", 0, it.errorMessage)
                     data.postValue(messagesToPush)
@@ -105,6 +113,27 @@ class ChatViewModel @Inject constructor(
         }
     }
 
+    private fun datePreparation(inDate: String): String {
+        val parser = SimpleDateFormat("Y-m-d,H:m:s", Locale.ENGLISH)
+        parser.timeZone = TimeZone.getTimeZone("UTC")
+
+        var date = parser.parse(inDate)
+
+        // make sure to add 1 hour if there is Daylight Saving Time
+        if (TimeZone.getDefault().useDaylightTime()) {
+            val cal = Calendar.getInstance()
+            cal.time = date
+            cal.add(Calendar.HOUR_OF_DAY, 1)
+            date = cal.time
+        }
+
+        parser.timeZone = TimeZone.getDefault()
+
+        return parser.format(date)
+    }
+
+    //endregion
+
     //region Notifications Service
 
     fun subscribeToNotifications() {
@@ -121,6 +150,8 @@ class ChatViewModel @Inject constructor(
 
     //endregion
 
+    //region Website Answer Data Class
+
     data class WebsiteAnswer(
         val nick: String,
         val date: String,
@@ -128,4 +159,6 @@ class ChatViewModel @Inject constructor(
         val room: Int,
         val errorResponse: String?
     )
+
+    //endregion
 }
