@@ -13,12 +13,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-
 @Module
 class HttpModule {
 
     //region Retrofit
 
+    @Singleton
     @Provides
     fun provideServerRetrofit(client: OkHttpClient, url: String): WordpressApi {
         val retrofit = Retrofit.Builder()
@@ -28,11 +28,10 @@ class HttpModule {
             .client(client)
             .build()
 
-        println(client)
-
         return retrofit.create(WordpressApi::class.java)
     }
 
+    @Singleton
     @Provides
     fun getWebsiteUrl(context: Context): String {
         return with(SharedPreferencesHelper(context)) {
@@ -44,8 +43,8 @@ class HttpModule {
 
     //region Retrofit - Http
 
-    @Provides
     @Singleton
+    @Provides
     fun provideOkHttpClient(): OkHttpClient {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY

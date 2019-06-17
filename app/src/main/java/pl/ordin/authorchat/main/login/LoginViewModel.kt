@@ -17,6 +17,7 @@ class LoginViewModel @Inject constructor(
     fun testConnection(): LiveData<String> {
         return Transformations.switchMap(
             wordpressApi.websiteRest(
+                sharedPreferencesHelper.websiteCompleteUrl,
                 "read",
                 "",
                 sharedPreferencesHelper.usernamePref,
@@ -49,6 +50,7 @@ class LoginViewModel @Inject constructor(
         with(sharedPreferencesHelper) {
             websiteUrlPrefixPref = websitePrefix
             websiteUrlPref = websiteAddress
+            websiteCompleteUrl = "$websitePrefix$websiteAddress/wp-json/author-chat/v2/chat"
             usernamePref = username
             passwordPref = password
             rememberUserPref = rememberUser

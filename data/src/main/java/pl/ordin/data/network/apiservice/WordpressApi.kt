@@ -4,13 +4,15 @@ import androidx.lifecycle.LiveData
 import pl.ordin.utility.retrofitlivedata.ApiResponse
 import retrofit2.http.POST
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface WordpressApi {
 
     //region Wordpress REST
 
-    @POST("wp-json/author-chat/v2/chat")
+    @POST
     fun websiteRest(
+        @Url url: String,
         @Query("function") function: String,
         @Query("msg") msg: String,
         @Query("l") login: String,

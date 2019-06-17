@@ -31,6 +31,7 @@ class ChatViewModel @Inject constructor(
     fun getMessages(): LiveData<Map<Int, WebsiteAnswer>?> {
         return switchMap(
             wordpressApi.websiteRest(
+                sharedPreferencesHelper.websiteCompleteUrl,
                 "read",
                 "",
                 sharedPreferencesHelper.usernamePref,
@@ -74,6 +75,7 @@ class ChatViewModel @Inject constructor(
 
     fun sendMessage(room: Int, message: String): LiveData<ApiResponse<WordpressApi.Result>> {
         return wordpressApi.websiteRest(
+            sharedPreferencesHelper.websiteCompleteUrl,
             "send",
             message,
             sharedPreferencesHelper.usernamePref,
@@ -85,6 +87,7 @@ class ChatViewModel @Inject constructor(
     fun getRooms(): LiveData<List<Int>?> {
         return Transformations.map(
             wordpressApi.websiteRest(
+                sharedPreferencesHelper.websiteCompleteUrl,
                 "rooms",
                 "",
                 sharedPreferencesHelper.usernamePref,

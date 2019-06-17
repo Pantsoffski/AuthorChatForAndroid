@@ -8,6 +8,7 @@ import javax.inject.Singleton
 
 const val WEBSITE_PREFIX = "websitePrefix"
 const val WEBSITE_URL = "websiteUrl"
+const val WEBSITE_COMPLETE_URL = "websiteCompleteUrl"
 const val USERNAME = "username"
 const val PASSWORD = "password"
 const val REMEMBER_USER = "rememberUser"
@@ -19,7 +20,6 @@ class SharedPreferencesHelper(c: Context) {
     private val prefs = PreferenceManager.getDefaultSharedPreferences(c)
 
     //region Login Data Shared Prefs getters/setters
-
     var websiteUrlPrefixPref: String
         get() = prefs.getString(WEBSITE_PREFIX, "")!!
         set(value) {
@@ -33,6 +33,14 @@ class SharedPreferencesHelper(c: Context) {
         set(value) {
             prefs.edit()
                 .putString(WEBSITE_URL, value)
+                .apply()
+        }
+
+    var websiteCompleteUrl: String
+        get() = prefs.getString(WEBSITE_COMPLETE_URL, "")!!
+        set(value) {
+            prefs.edit()
+                .putString(WEBSITE_COMPLETE_URL, value)
                 .apply()
         }
 

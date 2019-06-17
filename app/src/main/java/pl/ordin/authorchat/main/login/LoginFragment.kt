@@ -97,6 +97,8 @@ class LoginFragment : Fragment() {
             progressBar.visibility = View.VISIBLE
             // show background dim
             backgroundDim.visibility = View.VISIBLE
+            // make sign in button unclickable
+            signInButton.isEnabled = false
 
             testConnection()
         }
@@ -126,6 +128,8 @@ class LoginFragment : Fragment() {
             progressBar.visibility = View.GONE
             //remove background dim
             backgroundDim.visibility = View.GONE
+            // make sign in button clickable
+            signInButton.isEnabled = true
         }
 
         viewModel.testConnection().observe(this, testConnectionObserver)
