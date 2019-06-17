@@ -95,6 +95,8 @@ class ChatFragment : Fragment() {
         refresher()
 
         viewModel.subscribeToNotifications() //todo try to put it when you are sure that log in was successful
+
+        mainRoomButton.tag = 0 // set main button tag to 0 Int (in xml you can set only strong)
     }
 
     override fun onDestroy() {
@@ -169,6 +171,8 @@ class ChatFragment : Fragment() {
 
                     //add button to list
                     activeButtons.add(btn)
+
+                    buttonHighlighter()
                 }
             }
         }
@@ -178,9 +182,9 @@ class ChatFragment : Fragment() {
 
     private fun setMainRoomSendButtonsListeners() {
         mainRoomButton.setOnClickListener {
-            buttonHighlighter(it as MaterialButton)
-
             activeRoom = 0
+
+            buttonHighlighter()
 
             doAfterRoomButtonPressed()
         }
@@ -198,9 +202,9 @@ class ChatFragment : Fragment() {
 
     private fun setRoomButtonListener(btn: MaterialButton) {
         btn.setOnClickListener {
-            buttonHighlighter(it as MaterialButton)
-
             activeRoom = btn.tag as Int
+
+            buttonHighlighter()
 
             doAfterRoomButtonPressed()
         }
@@ -234,14 +238,13 @@ class ChatFragment : Fragment() {
 
     //region Buttons handling
 
-    private fun buttonHighlighter(button: MaterialButton) {
+    private fun buttonHighlighter() {
         //set background color to make button highlighted
-        button.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
-
-        //remove active color from last active button (make it inactive)
         activeButtons.map { btn ->
-            if (btn.tag != button.tag)
+            if (btn.tag != activeRoom)
                 btn.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+            else
+                btn.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
         }
     }
 
@@ -249,8 +252,8 @@ class ChatFragment : Fragment() {
         val button = MaterialButton(ContextThemeWrapper(this.context, R.style.MaterialButtonsStyle), null, 0)
         val layoutParams =
             LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        //layoutParams.setMargins((-6).toPx())
-        layoutParams.topMargin = (-6).toPx()
+
+        layoutParams.topMargin = (-5).toPx()
         layoutParams.bottomMargin = (-6).toPx()
         layoutParams.marginStart = 1.toPx()
         layoutParams.marginEnd = 1.toPx()
