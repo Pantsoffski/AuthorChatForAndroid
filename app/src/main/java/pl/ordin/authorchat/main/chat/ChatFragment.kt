@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -250,7 +249,11 @@ class ChatFragment : Fragment() {
         val button = MaterialButton(ContextThemeWrapper(this.context, R.style.MaterialButtonsStyle), null, 0)
         val layoutParams =
             LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        layoutParams.setMargins(2.toPx())
+        //layoutParams.setMargins((-6).toPx())
+        layoutParams.topMargin = (-6).toPx()
+        layoutParams.bottomMargin = (-6).toPx()
+        layoutParams.marginStart = 1.toPx()
+        layoutParams.marginEnd = 1.toPx()
 
         // called separately because this from MaterialButtonsStyle doesn't work in ContextThemeWrapper
         button.apply {
