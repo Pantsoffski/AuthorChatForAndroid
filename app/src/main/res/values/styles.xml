@@ -9,6 +9,9 @@
 
         <!-- Hide title bar -->
         <item name="windowNoTitle">true</item>
+
+        <!-- Change options background color -->
+        <item name="android:itemBackground">@color/colorPrimary</item>
     </style>
 
     <!-- region Sign In Button -->
