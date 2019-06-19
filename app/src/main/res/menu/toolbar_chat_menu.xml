@@ -2,6 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Notifications"
-          android:checkable="true" android:id="@+id/notifications"/>
-    <item android:title="About" android:id="@+id/about"/>
+          android:checkable="true"
+          android:id="@+id/notifications"/>
+    <item android:title="About"
+          android:id="@+id/about"/>
 </menu>

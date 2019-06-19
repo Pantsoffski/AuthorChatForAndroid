@@ -12,6 +12,7 @@ const val WEBSITE_COMPLETE_URL = "websiteCompleteUrl"
 const val USERNAME = "username"
 const val PASSWORD = "password"
 const val REMEMBER_USER = "rememberUser"
+const val NOTIFICATIONS = "notifications"
 
 //endregion
 
@@ -65,6 +66,14 @@ class SharedPreferencesHelper(c: Context) {
         set(value) {
             prefs.edit()
                 .putBoolean(REMEMBER_USER, value)
+                .apply()
+        }
+
+    var notifications: Boolean
+        get() = prefs.getBoolean(NOTIFICATIONS, false)
+        set(value) {
+            prefs.edit()
+                .putBoolean(NOTIFICATIONS, value)
                 .apply()
         }
 

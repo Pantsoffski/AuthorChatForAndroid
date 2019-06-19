@@ -7,9 +7,9 @@
         android:layout_height="match_parent"
         tools:context=".main.chat.ChatFragment">
 
-    <include
-            layout="@layout/toolbar_chat"
+    <fragment
             android:id="@+id/toolbar_included"
+            android:name="pl.ordin.authorchat.main.chat.toolbarmenu.ChatToolbarFragment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

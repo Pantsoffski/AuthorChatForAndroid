@@ -18,7 +18,6 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.chat_fragment.*
-import kotlinx.android.synthetic.main.toolbar_chat.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -72,6 +71,7 @@ class ChatFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this) // must have for dagger injection
+
         super.onAttach(context)
     }
 
@@ -96,8 +96,6 @@ class ChatFragment : Fragment() {
         startRefreshers()
 
         viewModel.subscribeToNotifications()
-
-        addToolbar()
     }
 
     override fun onDestroy() {
@@ -234,16 +232,6 @@ class ChatFragment : Fragment() {
             GlobalScope.launch(Dispatchers.Main) {
                 viewModel.getRooms().observe(this@ChatFragment, roomsObserver)
             }
-        }
-    }
-
-    private fun addToolbar() {
-        toolbar?.apply {
-            title = getString(R.string.app_name)
-            setNavigationOnClickListener {
-                activity?.onBackPressed()
-            }
-            inflateMenu(R.menu.toolbar_chat_menu)
         }
     }
 
