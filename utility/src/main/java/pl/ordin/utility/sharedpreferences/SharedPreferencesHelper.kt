@@ -70,7 +70,7 @@ class SharedPreferencesHelper(c: Context) {
         }
 
     var notifications: Boolean
-        get() = prefs.getBoolean(NOTIFICATIONS, false)
+        get() = prefs.getBoolean(NOTIFICATIONS, true)
         set(value) {
             prefs.edit()
                 .putBoolean(NOTIFICATIONS, value)

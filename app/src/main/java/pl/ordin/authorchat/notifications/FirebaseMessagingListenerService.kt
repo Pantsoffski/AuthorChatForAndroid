@@ -9,18 +9,33 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.android.AndroidInjection
 import pl.ordin.authorchat.R
 import pl.ordin.authorchat.main.MainActivity
+import pl.ordin.utility.sharedpreferences.SharedPreferencesHelper
+import javax.inject.Inject
 
 class FirebaseMessagingListenerService : FirebaseMessagingService() {
 
+    @Inject
+    lateinit var sharedPreferencesHelper: SharedPreferencesHelper
+
+    override fun onCreate() {
+        super.onCreate()
+
+        // Inject dependencies
+        AndroidInjection.inject(this)
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         super.onMessageReceived(remoteMessage)
-        remoteMessage?.let {
-            val title = it.notification?.title ?: "Backup title"
-            val message = it.notification?.body ?: "Backup message"
-            sendNotification(title, message)
-        }
+
+        if (sharedPreferencesHelper.notifications)
+            remoteMessage?.let {
+                val title = it.notification?.title ?: "No title"
+                val message = it.notification?.body ?: "No message"
+                sendNotification(title, message)
+            }
     }
 
     private fun sendNotification(title: String, message: String) {
@@ -33,7 +48,7 @@ class FirebaseMessagingListenerService : FirebaseMessagingService() {
         }
 
         val builder = NotificationCompat.Builder(applicationContext, channelID)
-            .setSmallIcon(R.drawable.notify_panel_notification_icon_bg)
+            .setSmallIcon(R.drawable.ic_twotone_message)
             .setContentTitle(title)
             .setContentText(message) as NotificationCompat.Builder
 

@@ -6,7 +6,10 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.Transformations.switchMap
 import androidx.lifecycle.ViewModel
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import pl.ordin.data.network.apiservice.WordpressApi
 import pl.ordin.utility.retrofitlivedata.ApiResponse
 import pl.ordin.utility.retrofitlivedata.ApiSuccessResponse
@@ -134,13 +137,19 @@ class ChatViewModel @Inject constructor(
     fun subscribeToNotifications() {
         val topic = sharedPreferencesHelper.websiteUrlPref
 
-        FirebaseMessaging.getInstance().subscribeToTopic(topic)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful)
-                    Log.i("Topic subscription was successful to topic", topic)
-                else
-                    Log.e("Topic subscription was not successful to topic", topic)
-            }
+        GlobalScope.launch {
+            // reset instance (unsubscribe from all topics), it has to be done on background thread
+            FirebaseInstanceId.getInstance().deleteInstanceId()
+
+            // subscribe to topic
+            FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful)
+                        Log.i("Topic subscription was successful to topic", topic)
+                    else
+                        Log.e("Topic subscription was not successful to topic", topic)
+                }
+        }
     }
 
     //endregion

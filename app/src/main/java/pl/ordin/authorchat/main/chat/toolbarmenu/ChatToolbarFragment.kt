@@ -58,7 +58,7 @@ class ChatToolbarFragment : Fragment() {
 
             // set initial value for notifications (check on/off)
             menu.findItem(R.id.notifications).apply {
-                isChecked = !isChecked
+                isChecked = viewModel.getNotificationsPref()
             }
         }
     }

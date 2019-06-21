@@ -8,6 +8,7 @@ import pl.ordin.authorchat.main.MainModule
 import pl.ordin.authorchat.main.chat.ChatModule
 import pl.ordin.authorchat.main.chat.toolbarmenu.ChatToolbarModule
 import pl.ordin.authorchat.main.login.LoginModule
+import pl.ordin.authorchat.notifications.FirebaseMessagingModule
 import pl.ordin.data.network.http.HttpModule
 import pl.ordin.utility.sharedpreferences.SharedPreferencesModule
 import javax.inject.Singleton
@@ -17,6 +18,7 @@ import javax.inject.Singleton
     modules = [
         AndroidSupportInjectionModule::class,
         ChatToolbarModule::class,
+        FirebaseMessagingModule::class,
         MainModule::class,
         LoginModule::class,
         ChatModule::class,
