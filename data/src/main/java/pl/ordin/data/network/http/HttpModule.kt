@@ -1,6 +1,5 @@
 package pl.ordin.data.network.http
 
-import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
@@ -8,7 +7,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import pl.ordin.data.network.apiservice.WordpressApi
 import pl.ordin.utility.retrofitlivedata.LiveDataCallAdapterFactory
-import pl.ordin.utility.sharedpreferences.SharedPreferencesHelper
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -20,23 +18,15 @@ class HttpModule {
 
     @Singleton
     @Provides
-    fun provideServerRetrofit(client: OkHttpClient, url: String): WordpressApi {
+    fun provideServerRetrofit(client: OkHttpClient): WordpressApi {
         val retrofit = Retrofit.Builder()
-            .baseUrl(url)
+            .baseUrl("http://www.domain.com/")
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
 
         return retrofit.create(WordpressApi::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun getWebsiteUrl(context: Context): String {
-        return with(SharedPreferencesHelper(context)) {
-            websiteUrlPrefixPref + websiteUrlPref
-        }
     }
 
     //endregion
