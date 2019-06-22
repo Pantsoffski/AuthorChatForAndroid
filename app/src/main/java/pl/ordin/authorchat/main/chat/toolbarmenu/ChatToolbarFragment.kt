@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_chat_toolbar.*
 import pl.ordin.authorchat.R
 import pl.ordin.utility.viewmodelfactory.ViewModelFactory
@@ -81,6 +83,7 @@ class ChatToolbarFragment : Fragment() {
                     }
                     R.id.about -> {
                         // start About fragment
+                        NavHostFragment.findNavController(parentFragment!!.navHostFragment).navigate(R.id.aboutFragment)
                     }
                 }
 

@@ -125,12 +125,13 @@ class ChatFragment : Fragment() {
             viewModel.getMessages().removeObserver(messagesObserver)
 
             result?.let {
-                //groupAdapter.clear()
+
+                //remove progress bar
+                progressBar.visibility = View.GONE
+
                 for (item in it) {
                     if (activeRoom == item.value.room) //filter to one room
                         groupAdapter.add(MessageItem(item.value.nick, item.value.date, item.value.msg))
-
-                    progressBar.visibility = View.GONE //remove progress bar
 
                     //move to last position
                     chatRecyclerView.smoothScrollToPosition(

@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_graph"
             app:startDestination="@id/splashFragment">
-    <fragment android:id="@+id/splashFragment" android:name="pl.ordin.authorchat.main.splash.SplashFragment"
-              android:label="splash_fragment" tools:layout="@layout/splash_fragment">
-        <action android:id="@+id/action_splashFragment_to_chatFragment2" app:destination="@id/chatFragment"/>
-        <action android:id="@+id/action_splashFragment_to_loginFragment2" app:destination="@+id/loginFragment"/>
+
+    <fragment android:id="@+id/splashFragment"
+              android:name="pl.ordin.authorchat.main.splash.SplashFragment"
+              android:label="splash_fragment"
+              tools:layout="@layout/splash_fragment">
+        <action android:id="@+id/action_splashFragment_to_loginFragment2"
+                app:destination="@+id/loginFragment"/>
     </fragment>
-    <fragment android:id="@+id/chatFragment" android:name="pl.ordin.authorchat.main.chat.ChatFragment"
-              android:label="chat_fragment" tools:layout="@layout/chat_fragment"/>
-    <fragment android:id="@+id/loginFragment" android:name="pl.ordin.authorchat.main.login.LoginFragment"
-              android:label="login_fragment" tools:layout="@layout/login_fragment"/>
+
+    <fragment android:id="@+id/chatFragment"
+              android:name="pl.ordin.authorchat.main.chat.ChatFragment"
+              android:label="chat_fragment"
+              tools:layout="@layout/chat_fragment">
+        <action android:id="@+id/action_chatFragment_to_aboutFragment" app:destination="@id/aboutFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/loginFragment"
+              android:name="pl.ordin.authorchat.main.login.LoginFragment"
+              android:label="login_fragment"
+              tools:layout="@layout/login_fragment">
+        <action android:id="@+id/action_loginFragment_to_chatFragment"
+                app:destination="@id/chatFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/aboutFragment"
+              android:name="pl.ordin.authorchat.main.about.AboutFragment"
+              android:label="about_fragment"
+              tools:layout="@layout/about_fragment"/>
 </navigation>

@@ -44,8 +44,16 @@
     </string>
     <string name="error_dialog_message_unknown">Unknown error. I really don\'t know what to do…</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- endregion -->
+
+    <!--region About -->
+
+    <string name="about">About</string>
+    <string name="rights">Copyright %1$d, Pesta Apps\nAll Rights Reserved</string>
+    <string name="contact_me">If you have any questions or problems with app, please contact me at\n
+        <a href="mailto:piotr.pesta@gmail.com">piotr.pesta@gmail.com</a>
+    </string>
 
     <!-- endregion -->
+
 </resources>
