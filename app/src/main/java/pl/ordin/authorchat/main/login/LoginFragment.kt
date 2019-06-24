@@ -91,7 +91,7 @@ class LoginFragment : Fragment() {
             // save login data to shared prefs
             viewModel.saveSignInData(
                 websitePrefix = urlPrefixSpinner.selectedItem.toString(),
-                websiteAddress = websiteAddress.text.toString(),
+                websiteAddress = websiteAddress.text.toString().replace("\\s".toRegex(), ""), // also remove whitespaces
                 username = username.text.toString(),
                 password = password.text.toString(),
                 rememberUser = rememberUserCheckBox.isChecked
