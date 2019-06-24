@@ -14,6 +14,8 @@ import pl.ordin.authorchat.R
 
 class SplashFragment : Fragment() {
 
+    //region Lifecycle
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,6 +29,10 @@ class SplashFragment : Fragment() {
         redirectToSignIn()
     }
 
+    //endregion
+
+    //region Redirection
+
     private fun redirectToSignIn() {
         GlobalScope.launch {
             delay(1000)
@@ -34,5 +40,7 @@ class SplashFragment : Fragment() {
             NavHostFragment.findNavController(navHostFragment).navigate(R.id.loginFragment)
         }
     }
+
+    //endregion
 
 }

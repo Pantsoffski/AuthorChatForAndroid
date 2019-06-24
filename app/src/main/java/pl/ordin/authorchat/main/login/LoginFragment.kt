@@ -19,10 +19,14 @@ import javax.inject.Inject
 
 class LoginFragment : Fragment() {
 
+    //region ViewModel
+
     @Inject
     lateinit var viewModelFactory: ViewModelFactory<LoginViewModel>
 
     private lateinit var viewModel: LoginViewModel
+
+    //endregion
 
     //region Observers
 

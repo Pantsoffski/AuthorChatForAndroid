@@ -26,6 +26,8 @@ class ChatToolbarFragment : Fragment() {
 
     //endregion
 
+    //region Lifecycle
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this) // must have for dagger injection
 
@@ -50,6 +52,10 @@ class ChatToolbarFragment : Fragment() {
         startListeners()
     }
 
+    //endregion
+
+    //region Toolbar
+
     private fun setUpToolbar() {
         toolbar.apply {
             // set title
@@ -64,6 +70,10 @@ class ChatToolbarFragment : Fragment() {
             }
         }
     }
+
+    //endregion
+
+    //region Listeners
 
     private fun startListeners() {
         toolbar.apply {
@@ -91,4 +101,7 @@ class ChatToolbarFragment : Fragment() {
             }
         }
     }
+
+    //endregion
+
 }

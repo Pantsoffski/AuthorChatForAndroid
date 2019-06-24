@@ -18,7 +18,12 @@ const val NOTIFICATIONS = "notifications"
 
 @Singleton
 class SharedPreferencesHelper(c: Context) {
+
+    //region PreferenceManager
+
     private val prefs = PreferenceManager.getDefaultSharedPreferences(c)
+
+    //endregion
 
     //region Login Data Shared Prefs getters/setters
     var websiteUrlPrefixPref: String

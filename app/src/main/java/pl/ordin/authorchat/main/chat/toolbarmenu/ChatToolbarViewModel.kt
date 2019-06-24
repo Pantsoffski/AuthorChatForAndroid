@@ -8,10 +8,14 @@ class ChatToolbarViewModel @Inject constructor(
     private var sharedPreferencesHelper: SharedPreferencesHelper
 ) : ViewModel() {
 
+    //region Notifications Preferences
+
     fun setNotificationsPref(setting: Boolean) {
         sharedPreferencesHelper.notifications = setting
     }
 
     fun getNotificationsPref(): Boolean = sharedPreferencesHelper.notifications
+
+    //endregion
 
 }

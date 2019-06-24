@@ -14,6 +14,8 @@ import java.util.*
 
 class AboutFragment : Fragment() {
 
+    //region Lifecycle
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,6 +27,14 @@ class AboutFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        populateUiFields()
+    }
+
+    //endregion
+
+    //region Ui
+
+    private fun populateUiFields() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
 
@@ -33,4 +43,6 @@ class AboutFragment : Fragment() {
         rightsReserved.text = getString(R.string.rights, year)
         contactMe.movementMethod = LinkMovementMethod.getInstance()
     }
+
+    //endregion
 }

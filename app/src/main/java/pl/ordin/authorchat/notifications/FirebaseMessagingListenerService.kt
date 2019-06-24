@@ -17,8 +17,14 @@ import javax.inject.Inject
 
 class FirebaseMessagingListenerService : FirebaseMessagingService() {
 
+    //region Shared Preferences Helper
+
     @Inject
     lateinit var sharedPreferencesHelper: SharedPreferencesHelper
+
+    //endregion
+
+    //region Lifecycle
 
     override fun onCreate() {
         super.onCreate()
@@ -26,6 +32,10 @@ class FirebaseMessagingListenerService : FirebaseMessagingService() {
         // Inject dependencies
         AndroidInjection.inject(this)
     }
+
+    //endregion
+
+    //region New message listener
 
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         super.onMessageReceived(remoteMessage)
@@ -37,6 +47,10 @@ class FirebaseMessagingListenerService : FirebaseMessagingService() {
                 sendNotification(title, message)
             }
     }
+
+    //endregion
+
+    //region Notification
 
     private fun sendNotification(title: String, message: String) {
         val manager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -63,4 +77,7 @@ class FirebaseMessagingListenerService : FirebaseMessagingService() {
         // Add as notification
         manager.notify(0, builder.build())
     }
+
+    //endregion
+
 }

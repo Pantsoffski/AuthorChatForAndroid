@@ -12,8 +12,14 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
+    //region Fragment Injector
+
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+
+    override fun supportFragmentInjector() = fragmentInjector
+
+    //endregion
 
     //region Lifecycle
 
@@ -31,8 +37,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     override fun onSupportNavigateUp() = Navigation.findNavController(this, R.id.splashFragment).navigateUp()
 
     //endregion
-
-    override fun supportFragmentInjector() = fragmentInjector
 
 //    fun <VM> xyz(i: Int): VM? {
 //        return null

@@ -10,6 +10,9 @@ class MessageItem(
     private val date: String,
     private val message: String
 ) : Item() {
+
+    //region Single Message
+
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.apply {
             nickView.text = nick
@@ -19,4 +22,6 @@ class MessageItem(
     }
 
     override fun getLayout(): Int = R.layout.item_message
+
+    //endregion
 }

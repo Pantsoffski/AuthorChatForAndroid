@@ -14,6 +14,8 @@ class LoginViewModel @Inject constructor(
     private val sharedPreferencesHelper: SharedPreferencesHelper
 ) : ViewModel() {
 
+    //region Connection testing
+
     fun testConnection(): LiveData<String> {
         return Transformations.switchMap(
             wordpressApi.websiteRest(
@@ -39,6 +41,10 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    //endregion
+
+    //region Shared Preferences handling
 
     fun saveSignInData(
         websitePrefix: String,
@@ -72,4 +78,7 @@ class LoginViewModel @Inject constructor(
     fun userRemembered(): Boolean {
         return sharedPreferencesHelper.rememberUserPref
     }
+
+    //endregion
+
 }
